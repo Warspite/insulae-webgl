@@ -1,0 +1,44 @@
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = "com.warspite.insulae"
+ext.nextRelease = '0.1.0';
+ext.warspiteCommonVersion = '1.5.21';
+
+if (project.hasProperty("release")) {
+	version = ext.nextRelease
+} 
+else {
+	version = ext.nextRelease + '-SNAPSHOT'
+}
+
+jar.enabled = false
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+	
+configurations {
+	webResources {
+		description = 'Containers of web resources.'
+		transitive = false
+	}
+}
+
+dependencies {
+	webResources 'com.warspite.common:web:' + ext.warspiteCommonVersion
+}
+
+war {
+	from { 
+		configurations.webResources.collect { 
+			it.isDirectory() ? it : zipTree(it)
+		}
+	}
+}
+
+artifacts {
+	archives war
+}
