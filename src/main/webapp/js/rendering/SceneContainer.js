@@ -1,15 +1,18 @@
 var SceneContainer = {
 	init : function(keyboard) {
+		SceneContainer.$domElement = $('#sceneContainer');
+		SceneContainer.domElement = SceneContainer.$domElement[0];
 		SceneContainer.renderer = new THREE.WebGLRenderer();
 		SceneContainer.camera = new THREE.PerspectiveCamera(45, 1.0, 0.1, 999999);
 		SceneContainer.camera.position.setZ(300);
 		SceneContainer.scene = new THREE.Scene();
-		SceneContainer.renderer.setSize(640, 480);
+		SceneContainer.lastInnerWidth = 0;
+		SceneContainer.lastInnerHeight = 0;
 		SceneContainer.lastRenderCycle = new Date().getTime();
 
 		SceneContainer.sceneObjects = new Array();
 
-		$('#sceneContainer').append(SceneContainer.renderer.domElement);
+		SceneContainer.$domElement.append(SceneContainer.renderer.domElement);
 
 		SceneContainer.scene.add(SceneContainer.camera);
 
@@ -19,7 +22,14 @@ var SceneContainer = {
 	},
 
 	configureCamera : function() {
-		SceneContainer.camera.aspect = SceneContainer.renderer.context.drawingBufferWidth / SceneContainer.renderer.context.drawingBufferHeight;		SceneContainer.camera.updateProjectionMatrix();	},
+		if(window.innerWidth != SceneContainer.lastInnerWidth || window.innerHeight != SceneContainer.lastInnerHeight) {
+			SceneContainer.lastInnerWidth = window.innerWidth;
+			SceneContainer.lastInnerHeight = window.innerHeight;
+			SceneContainer.renderer.setSize(window.innerWidth - 25, window.innerHeight - 60);
+			SceneContainer.camera.aspect = SceneContainer.renderer.context.drawingBufferWidth / SceneContainer.renderer.context.drawingBufferHeight;
+			SceneContainer.camera.updateProjectionMatrix();
+		}
+	},
 
 	render : function() {
 		var now = new Date().getTime();
@@ -29,6 +39,8 @@ var SceneContainer = {
 			if (o.animate)
 				o.animate(o, elapsedTime);
 		});
+		
+		TWEEN.update();
 
 		SceneContainer.configureCamera();
 

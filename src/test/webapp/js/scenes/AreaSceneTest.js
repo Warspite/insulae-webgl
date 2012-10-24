@@ -24,9 +24,7 @@ var area = {
 var areaScene = null;
 
 window.onload = function(event) {
-	var keyboard = new Keyboard();
-	DynamicData.setup();
-	SceneContainer.init(keyboard);
+	Init.run();
 
 	mock();
 
@@ -105,7 +103,7 @@ function mock() {
 	};
 
 	THREExt.material = function(params) {
-		return new THREE.MeshNormalMaterial({
+		return new THREE.MeshLambertMaterial({
 			color : params.color || 0x808080
 		});
 	}

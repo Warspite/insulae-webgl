@@ -126,4 +126,6 @@ CameraController.prototype.updateCamera = function() {
 	this.camera.rotation.y = this.pitch * Math.sin(this.rotation);
 	
 	this.camera.position = this.position.clone();
+	
+	this.camera.updateProjectionMatrix();
 };

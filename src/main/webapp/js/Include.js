@@ -1,6 +1,7 @@
 include("lib/jquery-1.7.2.min.js");
 //include("lib/three.min.js");
 include("lib/three.js");
+include("lib/Tween.js");
 include("lib/RequestAnimFrame.js");
 
 include("data/DynamicData.js");
@@ -22,3 +23,5 @@ include("util/event/EventPropagation.js");
 include("util/event/EventType.js");
 
 include("util/UtilityFunctions.js");
+
+include("Init.js");

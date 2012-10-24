@@ -23,11 +23,18 @@ var area = {
 };
 var areaScene = null;
 
-window.onload = function(event) {
-	var keyboard = new Keyboard();
-	DynamicData.setup();
-	SceneContainer.init(keyboard);
+var Main = {
+	init : function() {
+		var keyboard = new Keyboard();
+		DynamicData.setup();
+		SceneContainer.init(keyboard);
+		var mouse = new Mouse();
+	}
+}
 
+window.onload = function(event) {
+	Init.run();
+	
 	DynamicData.setAreaLocations(area.id, [{
 		id : 1,
 		areaId : area.id,

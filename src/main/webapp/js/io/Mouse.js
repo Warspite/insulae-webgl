@@ -1,10 +1,7 @@
-var Mouse = function(canvas, renderer)
+var Mouse = function()
 {
 	mixin(new EventDispatcher(), this);
 	
-	this.canvas = canvas;
-	this.renderer = renderer;
-
 	this.mousePressed = false;
 	this.mouseDown = false;
 	this.mouseReleased = false;
@@ -24,13 +21,22 @@ var Mouse = function(canvas, renderer)
 	this.lastY = 0;
 	this.delta = {x: 0, y: 0};
 	this.wheelDelta = 0;
-
+	
+	this.projector = new THREE.Projector();
+	
+	this.hoverHighlight = new THREE.PointLight(0xffffff, 0, 200);
+	SceneContainer.scene.add(this.hoverHighlight);
+	
 	var self = this;
-	canvas.addEventListener("mousemove", function(e){ self.mouseEventHandler(e); }, false);
-	canvas.addEventListener("mousedown", function(e){ self.mouseEventHandler(e); }, false);
-	canvas.addEventListener("mouseup", function(e){ self.mouseEventHandler(e); }, false);
-	canvas.addEventListener("DOMMouseScroll", function(e){ self.mouseScrollHandler(e); }, false);
-	canvas.addEventListener("mousewheel", function(e){ self.mouseScrollHandler(e); }, false);
+	SceneContainer.domElement.addEventListener("mousemove", function(e){ self.mouseEventHandler(e); }, false);
+	SceneContainer.domElement.addEventListener("mousedown", function(e){ self.mouseEventHandler(e); }, false);
+	SceneContainer.domElement.addEventListener("mouseup", function(e){ self.mouseEventHandler(e); }, false);
+	SceneContainer.domElement.addEventListener("DOMMouseScroll", function(e){ self.mouseScrollHandler(e); }, false);
+	SceneContainer.domElement.addEventListener("mousewheel", function(e){ self.mouseScrollHandler(e); }, false);
+	
+	this.timeOfLastTick = new Date().getTime();
+	Mouse.instance = this;
+	Mouse.instance.tick();
 };
 
 
@@ -58,8 +64,8 @@ Mouse.prototype.mouseEventHandler = function(e)
 		y = e.offsetY;
 	}
 	else if (e.layerX || e.layerX == 0) { // Firefox
-		x = e.pageX - this.canvas.offsetLeft;
-		y = e.pageY - this.canvas.offsetTop;
+		x = e.pageX - SceneContainer.domElement.offsetLeft;
+		y = e.pageY - SceneContainer.domElement.offsetTop;
 	} 
 
 	var mouse = this;
@@ -89,93 +95,83 @@ Mouse.prototype.mousedown = function(self, e, x, y)
 	self.lastMouseDownY = y;
 };
 
-Mouse.prototype.tick = function(elapsedTime)
+Mouse.prototype.tick = function()
 {
+	var self = Mouse.instance;
+	var now = new Date().getTime();
+	var elapsedTime = now - self.timeOfLastTick;
+	self.timeOfLastTick = now;
+	
 	document.body.style.cursor = "default";
-	this.withinBoundsOfAwareWidget = false;
+	self.withinBoundsOfAwareWidget = false;
 		
-	if( !this.mouseMoved ) {
-		this.current.x = this.lastX;
-		this.current.y = this.lastY;
+	if( !self.mouseMoved ) {
+		self.current.x = self.lastX;
+		self.current.y = self.lastY;
 	}
 
-	if( !this.mouseScrolled ) {
-		this.wheelDelta = 0;
+	if( !self.mouseScrolled ) {
+		self.wheelDelta = 0;
 	}
 	else {
-		this.dispatchEvent(EventType.MOUSE_WHEEL, this.wheelDelta);
+		self.dispatchEvent(EventType.MOUSE_WHEEL, self.wheelDelta);
 	}
 	
-	this.delta.x = this.current.x - this.lastX;
-	this.delta.y = this.current.y - this.lastY;
+	self.delta.x = self.current.x - self.lastX;
+	self.delta.y = self.current.y - self.lastY;
 
-	this.lastX = this.current.x;
-	this.lastY = this.current.y;
+	self.lastX = self.current.x;
+	self.lastY = self.current.y;
 
-	this.mouseMoved = false;
-	this.mouseScrolled = false;
+	self.mouseMoved = false;
+	self.mouseScrolled = false;
 
-	if( this.mousePressed )
-		this.mouseDown = true;
+	if( self.mousePressed )
+		self.mouseDown = true;
 	
-	if( this.mouseReleased )
-		this.mouseDown = false;
+	if( self.mouseReleased )
+		self.mouseDown = false;
 	
-	this.updatePointedAtObject(elapsedTime);
+	self.updatePointedAtObject();
 	
-	this.mousePressed = false;
-	this.mouseReleased = false;
+	self.mousePressed = false;
+	self.mouseReleased = false;
+	
+	requestAnimFrame(Mouse.instance.tick);
 };
 
-Mouse.prototype.updatePointedAtObject = function(elapsedTime) {
+Mouse.prototype.updatePointedAtObject = function() {
 	this.lastPointedAtObject = this.pointedAtObject;
-	this.pointedAtObject = this.renderer.findTopmostObjectAtCoordinates(this.current);
+	this.pointedAtObject = null;
 	
-	if(this.lastPointedAtObject != null && this.pointedAtObject != this.lastPointedAtObject)
-		this.dispatchEvent(EventType.MOUSE_EXIT, null, EventPropagation.NONE, this.lastPointedAtObject);
-
-	if(this.pointedAtObject != null && this.pointedAtObject != this.lastPointedAtObject)
-		this.dispatchEvent(EventType.MOUSE_ENTER, null, EventPropagation.NONE, this.pointedAtObject);
+	var mouse2dCoordinates = new THREE.Vector3(
+		(this.current.x / SceneContainer.renderer.context.drawingBufferWidth) * 2 - 1,
+		-(this.current.y / SceneContainer.renderer.context.drawingBufferHeight) * 2 + 1,
+		0.5);
 	
-	this.handleDragEvents(elapsedTime);
-	this.handlePointedAtObjectEvents(elapsedTime);
-};
-
-Mouse.prototype.handleDragEvents = function(elapsedTime) {
-	if(this.mousePressed) {
-		this.draggedObject = this.pointedAtObject;
+	var mouse3dCoordinates = this.projector.unprojectVector(mouse2dCoordinates, SceneContainer.camera);
+	var mouseRay = new THREE.Ray(SceneContainer.camera.position, mouse3dCoordinates.subSelf(SceneContainer.camera.position).normalize());
+	var intersectedObjects = mouseRay.intersectObjects(SceneContainer.sceneObjects);
+	
+	for(i in intersectedObjects) {
+		var o = intersectedObjects[i].object;
+		if(o.mouseVisible) {
+			this.pointedAtObject = o;
+			break;
+		}
+			
 	}
-	else {
-		if(this.mouseReleased)
-			this.draggedObject = null;
-		else if(this.draggedObject != null && (this.delta.x != 0 || this.delta.y != 0))
-			this.dispatchEvent(EventType.MOUSE_DRAG, {delta: this.delta, elapsedTime: elapsedTime}, EventPropagation.NONE, this.draggedObject);
+	
+	this.highlightHoveredObject();
+};
+
+Mouse.prototype.highlightHoveredObject = function() {
+	if(this.lastPointedAtObject != null && this.pointedAtObject == null) {
+		this.hoverHighlight.intensity = 0;
 	}
-};
-
-Mouse.prototype.handlePointedAtObjectEvents = function(elapsedTime) {
-	if(this.pointedAtObject == null || this.pointedAtObject.inputSettings == null)
-		return;
 	
-	if(this.mousePressed)
-		this.dispatchEvent(EventType.MOUSE_PRESSED, {coords: this.current, elapsedTime: elapsedTime}, EventPropagation.NONE, this.pointedAtObject);
-	
-	if(this.mouseReleased)
-		this.dispatchEvent(EventType.MOUSE_RELEASED, {coords: this.current, elapsedTime: elapsedTime}, EventPropagation.NONE, this.pointedAtObject);
-	
-	if(this.mouseDown)
-		this.dispatchEvent(EventType.MOUSE_DOWN, {coords: this.current, elapsedTime: elapsedTime}, EventPropagation.NONE, this.pointedAtObject);
-	
-	if(this.pointedAtObject.inputSettings.mouseCursor != null)
-		document.body.style.cursor = this.pointedAtObject.inputSettings.mouseCursor;
-};
-
-Mouse.prototype.isWithinBounds = function(bounds)
-{
-	return this.current.x > bounds.left && this.current.y > bounds.top && this.current.x < bounds.right && this.current.y < bounds.bottom;
-};
-
-Mouse.prototype.getGeometricDistance = function(pos)
-{
-	return Math.sqrt(Math.pow(pos.x - this.current.x, 2) + Math.pow(pos.y - this.current.y, 2));
+	if(this.pointedAtObject != null && this.pointedAtObject != this.lastPointedAtObject ) {
+		this.hoverHighlight.intensity = 1;
+		var tween = new TWEEN.Tween( this.hoverHighlight.position ).to( this.pointedAtObject.position, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+	}
 };
