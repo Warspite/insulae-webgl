@@ -7,8 +7,8 @@ AreaScene.sunDistance = 500;
 
 AreaScene.prototype.populateScene = function(area) {
 	this.addSunAndMoon(area);
-	this.addSky(area);
-	this.addOcean(area);	this.addLocations(area);
+	//this.addSky(area);
+	//this.addOcean(area);	this.addLocations(area);
 	
 };
 
@@ -55,9 +55,13 @@ AreaScene.prototype.addSky = function(area) {
 AreaScene.prototype.addLocations = function(area) {
 	$.each(DynamicData.locationsByArea[area.id], function(index, l) {
 		var lType = StaticData.locationTypes[l.locationTypeId];
-		var n = new THREE.Mesh(new THREE.SphereGeometry(6, 16, 16), THREExt.material({image: "location/" + lType.canonicalName + ".png", color: 0x00cc00}));
-		n.position = new THREE.Vector3(10 * l.coordinatesX, 10 * l.coordinatesY, 0);
-		n.mouseVisible = true;
-		SceneContainer.addToScene(n);
-	});
+		var loader = new THREE.ColladaLoader();
+		var meshPath = Paths.MESH_ROOT + "location/" + lType.canonicalName + ".dae";
+		loader.load(meshPath, function(collada) {
+			var mesh = collada.scene;
+			mesh.position.set(10 * l.coordinatesX, 10 * l.coordinatesY, 0);
+			mesh.updateMatrix();
+			mesh.mouseVisible = true;
+			SceneContainer.addToScene(mesh);
+		}); 	});
 };

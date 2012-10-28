@@ -1,4 +1,5 @@
 var Paths = {
+	MESH_ROOT : "../../../../main/webapp/meshes/",
 	IMAGE_ROOT : "../../../../main/webapp/images/",
 	JAVASCRIPT_ROOT : "../../../../main/webapp/js/",
 	SOUND_ROOT : "../../../../main/webapp/sound/"

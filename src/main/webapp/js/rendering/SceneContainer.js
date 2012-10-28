@@ -72,4 +72,27 @@ var SceneContainer = {
 
 		SceneContainer.sceneObjects = new Array();
 	},
+	
+	getAllMeshes : function() {
+		var meshes = [];
+		
+		for(i in SceneContainer.sceneObjects) {
+			var o = SceneContainer.sceneObjects[i];
+			if(o instanceof THREE.Mesh)
+				meshes.push(o);
+				
+			if(o instanceof THREE.Object3D) {
+				var descendants = o.getDescendants();
+				for(j in descendants) {
+					var d = descendants[j];
+					if(d instanceof THREE.Mesh) {
+						d.sceneObjectAncestor = o;
+						meshes.push(d);
+					}
+				}
+			}
+		}
+		
+		return meshes;
+	}
 };

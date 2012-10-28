@@ -151,10 +151,11 @@ Mouse.prototype.updatePointedAtObject = function() {
 	
 	var mouse3dCoordinates = this.projector.unprojectVector(mouse2dCoordinates, SceneContainer.camera);
 	var mouseRay = new THREE.Ray(SceneContainer.camera.position, mouse3dCoordinates.subSelf(SceneContainer.camera.position).normalize());
-	var intersectedObjects = mouseRay.intersectObjects(SceneContainer.sceneObjects);
+	var intersectedMeshes = mouseRay.intersectObjects(SceneContainer.getAllMeshes());
 	
-	for(i in intersectedObjects) {
-		var o = intersectedObjects[i].object;
+	for(i in intersectedMeshes) {
+		var mesh = intersectedMeshes[i].object;
+		var o = mesh.sceneObjectAncestor || mesh;
 		if(o.mouseVisible) {
 			this.pointedAtObject = o;
 			break;
@@ -167,11 +168,11 @@ Mouse.prototype.updatePointedAtObject = function() {
 
 Mouse.prototype.highlightHoveredObject = function() {
 	if(this.lastPointedAtObject != null && this.pointedAtObject == null) {
-		this.hoverHighlight.intensity = 0;
+		new TWEEN.Tween( this.hoverHighlight ).to( { intensity: 0.0 }, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
 	}
 	
 	if(this.pointedAtObject != null && this.pointedAtObject != this.lastPointedAtObject ) {
-		this.hoverHighlight.intensity = 1;
-		var tween = new TWEEN.Tween( this.hoverHighlight.position ).to( this.pointedAtObject.position, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+		new TWEEN.Tween( this.hoverHighlight ).to( { intensity: 1.0 }, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+		new TWEEN.Tween( this.hoverHighlight.position ).to( this.pointedAtObject.position, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
 	}
 };
