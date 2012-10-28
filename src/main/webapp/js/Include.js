@@ -1,7 +1,10 @@
+var threeLoaded = function() {
+	include("lib/ColladaLoader.js");
+};
+
 include("lib/jquery-1.7.2.min.js");
-//include("lib/three.min.js");
-include("lib/three.js");
-include("lib/ColladaLoader.js");
+//include("lib/three.min.js", threeLoaded);
+include("lib/three.js", threeLoaded);
 include("lib/Tween.js");
 include("lib/RequestAnimFrame.js");
 

@@ -5,12 +5,16 @@ var Paths = {
 	SOUND_ROOT : "sound/"
 }
 
-function include(file) {
+function include(file, onload) {
+	var loaded = false;
 	if (document.createElement && document.getElementsByTagName) {
 		var head = document.getElementsByTagName('head')[0];
 		var script = document.createElement('script');
 		script.setAttribute('type', 'text/javascript');
 		script.setAttribute('src', Paths.JAVASCRIPT_ROOT + file);
+		if(onload)
+			script.onload = onload;
+			
 		head.appendChild(script);
 	}
 }
