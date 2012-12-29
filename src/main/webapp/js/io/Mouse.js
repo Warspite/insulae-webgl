@@ -150,8 +150,8 @@ Mouse.prototype.updatePointedAtObject = function() {
 		0.5);
 	
 	var mouse3dCoordinates = this.projector.unprojectVector(mouse2dCoordinates, SceneContainer.camera);
-	var mouseRay = new THREE.Ray(SceneContainer.camera.position, mouse3dCoordinates.subSelf(SceneContainer.camera.position).normalize());
-	var intersectedMeshes = mouseRay.intersectObjects(SceneContainer.getAllMeshes());
+	var mouseRaycaster = new THREE.Raycaster(SceneContainer.camera.position, mouse3dCoordinates.subSelf(SceneContainer.camera.position).normalize());
+	var intersectedMeshes = mouseRaycaster.intersectObjects(SceneContainer.getAllMeshes());
 	
 	for(i in intersectedMeshes) {
 		var mesh = intersectedMeshes[i].object;

@@ -1,21 +1,7 @@
-var Paths = {
-	MESH_ROOT : "../../../../main/webapp/meshes/",
-	IMAGE_ROOT : "../../../../main/webapp/images/",
-	JAVASCRIPT_ROOT : "../../../../main/webapp/js/",
-	SOUND_ROOT : "../../../../main/webapp/sound/"
-}
-
-function include(file) {
-	if (document.createElement && document.getElementsByTagName) {
-		var head = document.getElementsByTagName('head')[0];
-		var script = document.createElement('script');
-		script.setAttribute('type', 'text/javascript');
-		script.setAttribute('src', Paths.JAVASCRIPT_ROOT + file);
-		head.appendChild(script);
-	}
-}
-
-include("Include.js");
+var testmain = document.createElement('script');
+testmain.setAttribute('type', 'text/javascript');
+testmain.setAttribute('src', '../TestMain.js');
+document.getElementsByTagName('head')[0].appendChild(testmain);
 
 var area = {
 	id : 1,
@@ -25,15 +11,17 @@ var area = {
 var areaScene = null;
 
 window.onload = function(event) {
+	generalMock();
+	
 	Init.run();
 
-	mock();
+	specificMock();
 
 	areaScene = new AreaScene(area);
 	areaScene.populateScene(area);
 };
 
-function mock() {
+function specificMock() {
 	DynamicData.setAreaLocations(area.id, [{
 		id : 1,
 		areaId : area.id,
@@ -102,10 +90,4 @@ function mock() {
 			color : "bdb572"
 		},
 	};
-
-	THREExt.material = function(params) {
-		return new THREE.MeshLambertMaterial({
-			color : params.color || 0x808080
-		});
-	}
 }
