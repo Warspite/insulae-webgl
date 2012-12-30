@@ -14,7 +14,7 @@ AreaScene.prototype.populateScene = function(area) {
 
 AreaScene.prototype.addOcean = function(area) {
 	var ocean = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000), THREExt.material({color: 0x6060ff}));
-	ocean.position = new THREE.Vector3(0, 0, 0);
+	ocean.position = new THREE.Vector3(0, 0, -10);
 	SceneContainer.addToScene(ocean);
 };
 

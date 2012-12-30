@@ -1,96 +1,108 @@
 var StaticData = {
-	load: function(progressMeter) {
-		progressMeter.targetProgress = 15;
-
-		Server.req("geography/LocationType", "GET", null, progressMeter, StaticData.locationTypesLoaded);
-		Server.req("geography/TransportationType", "GET", null, progressMeter, StaticData.transportationTypesLoaded);
-		Server.req("geography/TransportationCost", "GET", null, progressMeter, StaticData.transportationCostsLoaded);
-		Server.req("geography/ResourceType", "GET", null, progressMeter, StaticData.resourceTypesLoaded);
-		Server.req("industry/BuildingType", "GET", null, progressMeter, StaticData.buildingTypesLoaded);
-		Server.req("industry/ItemType", "GET", null, progressMeter, StaticData.itemTypesLoaded);
-		Server.req("industry/Action", "GET", null, progressMeter, StaticData.actionsLoaded);
-		Server.req("industry/ActionItemCost", "GET", null, progressMeter, StaticData.actionItemCostsLoaded);
-		Server.req("industry/ActionItemOutput", "GET", null, progressMeter, StaticData.actionItemOutputsLoaded);
-		Server.req("industry/ResourceRequiredNearActionTargetLocation", "GET", null, progressMeter, StaticData.resourcesRequiredNearActionTargetLocationLoaded);
-		Server.req("industry/LocationTypeRequiredNearActionTargetLocation", "GET", null, progressMeter, StaticData.locationTypesRequiredNearActionTargetLocationLoaded);
-		Server.req("world/Realm", "GET", null, progressMeter, StaticData.realmsLoaded);
-		Server.req("world/Race", "GET", null, progressMeter, StaticData.racesLoaded);
-		Server.req("world/Sex", "GET", null, progressMeter, StaticData.sexesLoaded);
-		Server.req("meta/TroubleReportType", "GET", null, progressMeter, StaticData.troubleReportTypesLoaded);
+	tickProgress: function() {
+		StaticData.progress.completed += 1;
+		
+		if(StaticData.progress.completed >= StaticData.progress.target && !StaticData.progress.completionReported && StaticData.progress.completionCallback) {
+			StaticData.progress.completionCallback(StaticData.progress);
+			StaticData.progress.completionReported = true;
+		}
+		else if(StaticData.progress.progressCallback) {
+			StaticData.progress.progressCallback(StaticData.progress);
+		}
+	},
+	 
+	load: function(p) {
+		StaticData.progress = Params.check(p, null, {target: 15, completed: 0, progressCallback: null, completionCallback: null, completionReported: false});
+		
+		Server.req({servlet: "geography/LocationType", successCallback: StaticData.locationTypesLoaded});
+		Server.req({servlet: "geography/TransportationType", successCallback: StaticData.transportationTypesLoaded});
+		Server.req({servlet: "geography/TransportationCost", successCallback: StaticData.transportationCostsLoaded});
+		Server.req({servlet: "geography/ResourceType", successCallback: StaticData.resourceTypesLoaded});
+		Server.req({servlet: "industry/BuildingType", successCallback: StaticData.buildingTypesLoaded});
+		Server.req({servlet: "industry/ItemType", successCallback: StaticData.itemTypesLoaded});
+		Server.req({servlet: "industry/Action", successCallback: StaticData.actionsLoaded});
+		Server.req({servlet: "industry/ActionItemCost", successCallback: StaticData.actionItemCostsLoaded});
+		Server.req({servlet: "industry/ActionItemOutput", successCallback: StaticData.actionItemOutputsLoaded});
+		Server.req({servlet: "industry/ResourceRequiredNearActionTargetLocation", successCallback: StaticData.resourcesRequiredNearActionTargetLocationLoaded});
+		Server.req({servlet: "industry/LocationTypeRequiredNearActionTargetLocation", successCallback: StaticData.locationTypesRequiredNearActionTargetLocationLoaded});
+		Server.req({servlet: "world/Realm", successCallback: StaticData.realmsLoaded});
+		Server.req({servlet: "world/Race", successCallback: StaticData.racesLoaded});
+		Server.req({servlet: "world/Sex", successCallback: StaticData.sexesLoaded});
+		Server.req({servlet: "meta/TroubleReportType", successCallback: StaticData.troubleReportTypesLoaded});
 	},
 	
 	locationTypesLoaded: function(result, progressMeter) {
 		StaticData.locationTypes = Server.mapify(result.content.locationTypes);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	transportationTypesLoaded: function(result, progressMeter) {
 		StaticData.transportationTypes = Server.mapify(result.content.transportationTypes);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	transportationCostsLoaded: function(result, progressMeter) {
 		StaticData.transportationCosts = result.content.transportationCosts;
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	resourceTypesLoaded: function(result, progressMeter) {
 		StaticData.resourceTypes = Server.mapify(result.content.resourceTypes);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 	
 	buildingTypesLoaded: function(result, progressMeter) {
 		StaticData.buildingTypes = Server.mapify(result.content.buildingTypes);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	itemTypesLoaded: function(result, progressMeter) {
 		StaticData.itemTypes = Server.mapify(result.content.itemTypes);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	realmsLoaded: function(result, progressMeter) {
 		StaticData.realms = Server.mapify(result.content.realms);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	racesLoaded: function(result, progressMeter) {
 		StaticData.races = Server.mapify(result.content.races);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	sexesLoaded: function(result, progressMeter) {
 		StaticData.sexes = Server.mapify(result.content.sexes);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	actionsLoaded: function(result, progressMeter) {
 		StaticData.actions = Server.mapify(result.content.actions);
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	actionItemCostsLoaded: function(result, progressMeter) {
 		StaticData.actionItemCosts = result.content.actionItemCosts;
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	actionItemOutputsLoaded: function(result, progressMeter) {
 		StaticData.actionItemOutputs = result.content.actionItemOutputs;
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	resourcesRequiredNearActionTargetLocationLoaded: function(result, progressMeter) {
 		StaticData.resourcesRequiredNearActionTargetLocation = Server.mapify(result.content.resourcesRequiredNearActionTargetLocation, "actionId");
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	locationTypesRequiredNearActionTargetLocationLoaded: function(result, progressMeter) {
 		StaticData.locationTypesRequiredNearActionTargetLocation = Server.mapify(result.content.locationTypesRequiredNearActionTargetLocation, "actionId");
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 
 	troubleReportTypesLoaded: function(result, progressMeter) {
 		StaticData.troubleReportTypes = result.content.troubleReportTypes;
-		progressMeter.progress += 1;
+		StaticData.tickProgress();
 	},
 };

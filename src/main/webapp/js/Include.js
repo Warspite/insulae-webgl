@@ -22,12 +22,25 @@ include("io/CameraController.js");
 include("io/Key.js");
 include("io/Keyboard.js");
 include("io/Mouse.js");
+include("io/Server.js");
 
 include("util/event/EventDispatcher.js");
 include("util/event/EventHandler.js");
 include("util/event/EventPropagation.js");
 include("util/event/EventType.js");
 
+include("util/Params.js");
+include("util/Session.js");
 include("util/UtilityFunctions.js");
 
+include("html/CreateAvatar.js");
+include("html/CreateTroubleReport.js");
+include("html/ErrorMessage.js");
+include("html/FormUtility.js");
+include("html/HtmlInit.js");
+include("html/MenuBar.js");
+include("html/Message.js");
+include("html/RegisterAccount.js");
+
+include("Overloads.js");
 include("Init.js");

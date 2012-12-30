@@ -94,5 +94,9 @@ var SceneContainer = {
 		}
 		
 		return meshes;
+	},
+	
+	getSize : function() {
+		return {width: SceneContainer.lastInnerWidth, height: SceneContainer.lastInnerHeight};
 	}
 };
