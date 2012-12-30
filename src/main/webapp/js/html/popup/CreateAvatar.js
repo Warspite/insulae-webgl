@@ -1,4 +1,6 @@
 var CreateAvatar = {
+	id: 'createAvatar',
+	
 	textFields: [
 		{id: '#createAvatarName', minLength: 4}
 	],
@@ -16,7 +18,7 @@ var CreateAvatar = {
 		});
 		
 		$("#cancelCreateAvatarLink").click(function(event){
-			$('#createAvatar').css("visibility", "collapse");
+			Popup.hide(CreateAvatar);
 		});
 		
 		$.each(StaticData.realms, function(index, realm) {
@@ -32,14 +34,6 @@ var CreateAvatar = {
 	
 	clear: function() {
 		FormUtility.clear(CreateAvatar.textFields);
-	},
-	
-	show: function() {
-		$('#createAvatar').css("visibility", "visible");
-	},
-	
-	hide: function() {
-		$('#createAvatar').css("visibility", "collapse");
 	},
 	
 	create: function(name, realmId, raceId, sexId) {

@@ -1,4 +1,6 @@
 var CreateTroubleReport = {
+	id: 'createTroubleReport',
+	
 	textFields: [
 		{id: '#createTroubleReportSlogan', minLength: 4}
 	],
@@ -16,7 +18,7 @@ var CreateTroubleReport = {
 		});
 		
 		$("#cancelCreateTroubleReportLink").click(function(event){
-			CreateTroubleReport.hide();
+			Popup.hide(CreateTroubleReport);
 		});
 		
 		$.each(StaticData.troubleReportTypes, function(index, trType) {
@@ -31,29 +33,27 @@ var CreateTroubleReport = {
 		$('#createTroubleReportContent').val('');
 	},
 	
-	show: function(params) {
-		var p = params || {};
+	populate: function(p) {
+		var params = Params.check(p);
 		
-		if(p.troubleReportTypeId)
+		if(params.troubleReportTypeId)
 			$('#createTroubleReportTroubleReportTypeId').val(p.troubleReportTypeId);
 		
-		if(p.slogan)
+		if(params.slogan)
 			$('#createTroubleReportSlogan').val(p.slogan);
 		
-		if(p.content)
+		if(params.content)
 			$('#createTroubleReportContent').val(p.content);
-		
-		$('#createTroubleReport').css("visibility", "visible");
 		
 		CreateTroubleReport.evaluateForm();
 	},
 	
-	hide: function() {
-		$('#createTroubleReport').css("visibility", "collapse");
-	},
-	
 	create: function(troubleReportTypeId, slogan, content) {
-		Server.req("meta/TroubleReport", "PUT", {troubleReportTypeId: troubleReportTypeId, slogan: slogan, content: content}, null, CreateTroubleReport.creationSucceeded)
+		Server.req({
+			servlet: "meta/TroubleReport", 
+			type: "PUT", 
+			params: {troubleReportTypeId: troubleReportTypeId, slogan: slogan, content: content}, 
+			successCallback: CreateTroubleReport.creationSucceeded});
 	},
 	
 	evaluateForm: function() {
@@ -77,8 +77,7 @@ var CreateTroubleReport = {
 	},
 	
 	creationSucceeded: function(result) {
-		CreateTroubleReport.hide();
-		Message.setMessage("Success!", "Trouble report filed successfully.<br /><br />Thank you!");
-		Message.show();
+		Popup.hide(CreateTroubleReport);
+		Message.display("Success!", "Trouble report filed successfully.<br /><br />Thank you!");
 	},
 };

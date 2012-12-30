@@ -7,17 +7,17 @@ html { overflow-x:hidden; }
 table { border: 0px; cellspacing: 0px; cellpadding: 0px; text-align: left; }
 input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; font: '11px Arial'; font-color: #454570; }
 
-#menuBar { background-image: url('../images/menuBar/bg.png'); background-repeat: repeat-x; height: 32px; width: 400px; }
+#topBar { background-image: url('../images/topBar/bg.png'); background-repeat: repeat-x; height: 32px; width: 400px; }
 #loginButton { width: 60px; }
 
 .ajaxSpinner { width: 24px; height: 24px; float: left; visibility: collapse; background-image: url('../images/ajax-spinner.gif'); background-size: 24px 24px; }
 
-.menuBarChild { height: 0px; visibility: collapse; }
+.topBarChild { height: 0px; visibility: collapse; }
 .button:hover { cursor: pointer; }
 
-#loginForm { float: right; }
-#currentSession { float: right; }
-#helpAndTroubleReport { float: left; visibility: visible; }
+#loginWidget { float: right; }
+#currentSessionWidget { float: right; }
+#helpAndTroubleReportWidget { float: left; }
 
 .disabled { color: #808080; background-color: rgba(230,230,230,0.7); }
 .disabled:hover { cursor: default; }
@@ -40,7 +40,7 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 	margin: 0 auto;
 }
 
-#error {
+#errorMessage {
 	z-index: 100;
 	background-color: rgba(255,130,130,0.5);
 }

@@ -11,31 +11,31 @@
 	<script type="text/javascript" src="js/main.js"></script>
 </head>
 <body>
-	<div id="menuBar" >
-		<div id="helpAndTroubleReport" class="menuBarChild">
+	<div id="topBar" >
+		<div id="helpAndTroubleReportWidget" class="topBarChild">
 			<table>
 				<tr><td style="width: 70px;">Having problems?</td></tr>
 				<tr><td>No help yet, but <a href="#" id="createTroubleReportLink">write a trouble report!</a></td></tr>
 			</table>
 		</div>
 
-		<div id="loginForm" class="menuBarChild">
+		<div id="loginWidget" class="topBarChild">
 			<table>
 				<tr><td style="width: 70px;">No account?</td><td>Email</td><td>Password</td><td></td></tr>
 				<tr><td><a href="#" id="createAccountLink">Sign up!</a></td><td><input type="text" id="loginEmail" class="loginInputField" /></td><td><input type="password" id="loginPassword" class="loginInputField" /></td><td><input type="submit" value="Login" id="loginButton" class="loginInputField button" /></td></tr>
 			</table>
 		</div>
 
-		<div id="currentSession" class="menuBarChild">
+		<div id="currentSessionWidget" class="topBarChild">
 			<span id="currentSessionWelcome"></span><br/>
 			<a href="#" id="logoutLink">Log out</a>
 		</div>
 	</div>
 	
-	<div id="error" class="centeredPopup">
+	<div id="errorMessage" class="centeredPopup">
 		<h1>Error!</h1>
 		<br />
-		<span id="errorMessage"></span><br/>
+		<span id="errorContent"></span><br/>
 		<br/>
 		<a href="#" id="errorDismissLink">Ok, carry on...</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" id="errorReportLink">I want to report this!</a>
 	</div>

@@ -33,14 +33,20 @@ include("util/Params.js");
 include("util/Session.js");
 include("util/UtilityFunctions.js");
 
-include("html/CreateAvatar.js");
-include("html/CreateTroubleReport.js");
-include("html/ErrorMessage.js");
-include("html/FormUtility.js");
-include("html/HtmlInit.js");
-include("html/MenuBar.js");
-include("html/Message.js");
-include("html/RegisterAccount.js");
+include("html/popup/CreateAvatar.js");
+include("html/popup/CreateTroubleReport.js");
+include("html/popup/ErrorMessage.js");
+include("html/popup/Message.js");
+include("html/popup/Popup.js");
+include("html/popup/RegisterAccount.js");
+
+include("html/topbar/CurrentSessionWidget.js");
+include("html/topbar/HelpAndTroubleReportWidget.js");
+include("html/topbar/LoginWidget.js");
+include("html/topbar/TopBar.js");
+
+include("html/util/FormUtility.js");
+include("html/util/HtmlInit.js");
 
 include("Overloads.js");
 include("Init.js");

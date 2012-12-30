@@ -97,6 +97,6 @@ var SceneContainer = {
 	},
 	
 	getSize : function() {
-		return {width: SceneContainer.lastInnerWidth, height: SceneContainer.lastInnerHeight};
+		return {width: SceneContainer.renderer.context.drawingBufferWidth, height: SceneContainer.renderer.context.drawingBufferHeight};
 	}
 };

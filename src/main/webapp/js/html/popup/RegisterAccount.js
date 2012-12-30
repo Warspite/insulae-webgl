@@ -1,4 +1,6 @@
 var RegisterAccount = {
+	id: 'registerAccount',
+	
 	textFields: [
    	   	{id: '#registerCallSign', minLength: 4},
    	   	{id: '#registerGivenName', minLength: 2},
@@ -21,7 +23,7 @@ var RegisterAccount = {
 		});
 		
 		$("#cancelRegisterAccountLink").click(function(event){
-			$('#registerAccount').css("visibility", "collapse");
+			Popup.hide(RegisterAccount);
 		});
 	},
 	
@@ -29,16 +31,12 @@ var RegisterAccount = {
 		FormUtility.clear(RegisterAccount.textFields);
 	},
 	
-	show: function() {
-		$('#registerAccount').css("visibility", "visible");
-	},
-	
-	hide: function() {
-		$('#registerAccount').css("visibility", "collapse");
-	},	
-		
 	register: function(callSign, givenName, surname, email, password, passwordConfirm) {
-		Server.req("account/Account", "PUT", { email: email, password: password, surname: surname, givenName: givenName, callSign: callSign }, null, RegisterAccount.registrationSucceeded);
+		Server.req({
+			servlet: "account/Account", 
+			type: "PUT", 
+			params: { email: email, password: password, surname: surname, givenName: givenName, callSign: callSign }, 
+			successCallback: RegisterAccount.registrationSucceeded});
 	},
 	
 	evaluateForm: function(callSign, givenName, surname, email, password, passwordConfirm) {
@@ -83,6 +81,6 @@ var RegisterAccount = {
 	
 	registrationSucceeded: function(result) {
 		$('#registerAccount').css("visibility", "collapse");
-		MenuBar.login(result.content.email, $('#registerPassword').val());
+		LoginWidget.login(result.content.email, $('#registerPassword').val());
 	}
 };
