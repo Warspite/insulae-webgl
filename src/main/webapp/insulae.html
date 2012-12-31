@@ -27,8 +27,8 @@
 		</div>
 
 		<div id="currentSessionWidget" class="topBarChild">
-			<span id="currentSessionWelcome"></span><br/>
-			<a href="#" id="logoutLink">Log out</a>
+			<span id="currentSessionWelcome"></span>&nbsp;(<a href="#" id="logoutLink">Log out</a>)<br/>
+			<a href="#" id="openCreateAvatarLink">Create avatar</a>&nbsp;<a href="#" id="openSelectAvatarLink">Select avatar</a>
 		</div>
 	</div>
 	
@@ -63,7 +63,7 @@
 		</table>
 	</div>
 	
-	<div id="createAvatar" class="centeredPopup">
+	<div id="createAvatarPopup" class="centeredPopup">
 		<h1>Create avatar</h1>
 		(<a href="#" id="cancelCreateAvatarLink">Cancel</a>)<br />
 		<br />
@@ -73,6 +73,16 @@
 			<tr><td>Race</td><td><select id="createAvatarRace" class="createAvatarInputField" disabled="disabled" ></select></td><td><div id="createAvatarRaceAjaxSpinner" class="ajaxSpinner" ></div></td></tr>
 			<tr><td>Sex</td><td><select id="createAvatarSex" class="createAvatarInputField" disabled="disabled"></select></td><td><div id="createAvatarSexAjaxSpinner" class="ajaxSpinner" ></div></td></tr>
 			<tr><td></td><td><input type="submit" value="Create avatar" id="createAvatarButton" class="createAvatarInputField button disabled"/></td></tr>
+		</table>
+	</div>
+	
+	<div id="selectAvatarPopup" class="centeredPopup">
+		<h1>Select avatar</h1>
+		(<a href="#" id="cancelSelectAvatarLink">Cancel</a>)<br />
+		<br />
+		<table>
+			<tr><td>Avatar</td><td><select id="selectAvatarBox" class="selectAvatarInputField" ></select></td></tr>
+			<tr><td></td><td><input type="submit" value="Select avatar" id="selectAvatarButton" class="selectAvatarInputField button disabled"/></td></tr>
 		</table>
 	</div>
 	

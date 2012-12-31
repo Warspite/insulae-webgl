@@ -1,5 +1,5 @@
-var CreateAvatar = {
-	id: 'createAvatar',
+var CreateAvatarPopup = {
+	id: 'createAvatarPopup',
 	
 	textFields: [
 		{id: '#createAvatarName', minLength: 4}
@@ -12,13 +12,13 @@ var CreateAvatar = {
 				$("#" + event.currentTarget.id).blur();
 			}
 			else {
-				CreateAvatar.evaluateForm();
+				CreateAvatarPopup.evaluateForm();
 			}
 					
 		});
 		
 		$("#cancelCreateAvatarLink").click(function(event){
-			Popup.hide(CreateAvatar);
+			Popup.hide(CreateAvatarPopup);
 		});
 		
 		$.each(StaticData.realms, function(index, realm) {
@@ -27,13 +27,13 @@ var CreateAvatar = {
 			);
 		});
 
-		$('#createAvatarRace').change(CreateAvatar.raceSelectionChanged);
-		$('#createAvatarRealm').change(CreateAvatar.realmSelectionChanged);
+		$('#createAvatarRace').change(CreateAvatarPopup.raceSelectionChanged);
+		$('#createAvatarRealm').change(CreateAvatarPopup.realmSelectionChanged);
 		$('#createAvatarRealm').change();
 	},
 	
 	clear: function() {
-		FormUtility.clear(CreateAvatar.textFields);
+		FormUtility.clear(CreateAvatarPopup.textFields);
 	},
 	
 	create: function(name, realmId, raceId, sexId) {
@@ -41,19 +41,19 @@ var CreateAvatar = {
 			servlet: "world/Avatar", 
 			type: "PUT", 
 			params: {name: name, realmId: realmId, raceId: raceId, sexId: sexId}, 
-			successCallback: CreateAvatar.creationSucceeded});
+			successCallback: CreateAvatarPopup.creationSucceeded});
 	},
 	
 	evaluateForm: function() {
 		var formOk = true;
 		
-		for(i in CreateAvatar.textFields)
-			if(!FormUtility.evaluateTextField(CreateAvatar.textFields[i]))
+		for(i in CreateAvatarPopup.textFields)
+			if(!FormUtility.evaluateTextField(CreateAvatarPopup.textFields[i]))
 				formOk = false;
 
 		$("#createAvatarButton").off('click.createAvatar');
 		if( formOk ) {
-			$("#createAvatarButton").on('click.createAvatar', function(event){ CreateAvatar.create($('#createAvatarName').val(), parseInt($('#createAvatarRealm').val()), parseInt($('#createAvatarRace').val()), parseInt($('#createAvatarSex').val())); });
+			$("#createAvatarButton").on('click.createAvatar', function(event){ CreateAvatarPopup.create($('#createAvatarName').val(), parseInt($('#createAvatarRealm').val()), parseInt($('#createAvatarRace').val()), parseInt($('#createAvatarSex').val())); });
 			$("#createAvatarButton").removeClass('disabled');
 		}
 		else {
@@ -77,8 +77,13 @@ var CreateAvatar = {
 	},
 	
 	creationSucceeded: function(result) {
-		Widgets.avatarSelection.reload();
-		Widgets.avatarSelection.selectAvatar(result.content);
+		console.log('Created avatar!');
+		Popup.hide(CreateAvatarPopup);
+		Server.req({
+			servlet: 'world/Avatar',
+			params: { 'accountId': Session.currentAccount.id },
+			successCallback: CurrentSessionWidget.avatarsLoaded});
+		CurrentSessionWidget.avatarSelected(result.content);
 	},
 	
 	realmSelectionChanged: function() {
@@ -88,7 +93,7 @@ var CreateAvatar = {
 		Server.req({
 			servlet: "world/Race", 
 			params: {realmId: parseInt($('#createAvatarRealm').val())}, 
-			successCallback: CreateAvatar.racesByRealmLoaded});
+			successCallback: CreateAvatarPopup.racesByRealmLoaded});
 	},
 	
 	raceSelectionChanged: function() {
@@ -98,7 +103,7 @@ var CreateAvatar = {
 		Server.req({
 			servlet: "world/Sex", 
 			params: {raceId: parseInt($('#createAvatarRace').val())},
-			successCallback: CreateAvatar.sexesByRaceLoaded});
+			successCallback: CreateAvatarPopup.sexesByRaceLoaded});
 	},
 	
 	racesByRealmLoaded: function(result) {

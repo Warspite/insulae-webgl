@@ -48,3 +48,13 @@ roundNumber = function(number, digits) {
 	var rounded = Math.round(number * multiple) / multiple;
 	return rounded;
 };
+
+size = function(obj) {
+	var size = 0;
+	for(var i in obj) {
+		if(obj.hasOwnProperty(i))
+			size++;
+	}
+	
+	return size;
+}

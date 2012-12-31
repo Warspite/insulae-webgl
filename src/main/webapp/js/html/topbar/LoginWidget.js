@@ -57,5 +57,9 @@ var LoginWidget = {
 	loggedInAccountLoaded: function(result) {
 		Session.currentAccount = result.content;
 		$('#currentSessionWelcome').html('Welcome, ' + Session.currentAccount.givenName + '!');
+		Server.req({
+			servlet: 'world/Avatar',
+			params: { 'accountId': Session.currentAccount.id },
+			successCallback: CurrentSessionWidget.avatarsLoaded});
 	}
 };

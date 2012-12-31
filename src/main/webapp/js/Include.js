@@ -33,12 +33,13 @@ include("util/Params.js");
 include("util/Session.js");
 include("util/UtilityFunctions.js");
 
-include("html/popup/CreateAvatar.js");
+include("html/popup/CreateAvatarPopup.js");
 include("html/popup/CreateTroubleReport.js");
 include("html/popup/ErrorMessage.js");
 include("html/popup/Message.js");
 include("html/popup/Popup.js");
 include("html/popup/RegisterAccount.js");
+include("html/popup/SelectAvatarPopup.js");
 
 include("html/topbar/CurrentSessionWidget.js");
 include("html/topbar/HelpAndTroubleReportWidget.js");
