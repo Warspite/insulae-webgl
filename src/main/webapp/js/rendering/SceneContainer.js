@@ -25,7 +25,7 @@ var SceneContainer = {
 		if(window.innerWidth != SceneContainer.lastInnerWidth || window.innerHeight != SceneContainer.lastInnerHeight) {
 			SceneContainer.lastInnerWidth = window.innerWidth;
 			SceneContainer.lastInnerHeight = window.innerHeight;
-			SceneContainer.renderer.setSize(window.innerWidth, window.innerHeight - 32);
+			SceneContainer.renderer.setSize(window.innerWidth, window.innerHeight - Widget.$(TopBarWidget).height());
 			SceneContainer.camera.aspect = SceneContainer.renderer.context.drawingBufferWidth / SceneContainer.renderer.context.drawingBufferHeight;
 			SceneContainer.camera.updateProjectionMatrix();
 		}

@@ -33,18 +33,20 @@ include("util/Params.js");
 include("util/Session.js");
 include("util/UtilityFunctions.js");
 
-include("html/popup/CreateAvatarPopup.js");
-include("html/popup/CreateTroubleReport.js");
-include("html/popup/ErrorMessage.js");
-include("html/popup/Message.js");
-include("html/popup/Popup.js");
-include("html/popup/RegisterAccount.js");
-include("html/popup/SelectAvatarPopup.js");
+include("html/widget/Widget.js");
 
-include("html/topbar/CurrentSessionWidget.js");
-include("html/topbar/HelpAndTroubleReportWidget.js");
-include("html/topbar/LoginWidget.js");
-include("html/topbar/TopBar.js");
+include("html/widget/popup/CreateAvatarPopup.js");
+include("html/widget/popup/CreateTroubleReport.js");
+include("html/widget/popup/ErrorMessage.js");
+include("html/widget/popup/Message.js");
+include("html/widget/popup/Popup.js");
+include("html/widget/popup/RegisterAccount.js");
+include("html/widget/popup/SelectAvatarPopup.js");
+
+include("html/widget/top/CurrentSessionWidget.js");
+include("html/widget/top/HelpAndTroubleReportWidget.js");
+include("html/widget/top/LoginWidget.js");
+include("html/widget/top/TopBarWidget.js");
 
 include("html/util/FormUtility.js");
 include("html/util/HtmlInit.js");

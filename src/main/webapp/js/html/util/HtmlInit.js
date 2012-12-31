@@ -7,13 +7,13 @@ var HtmlInit = {
 		RegisterAccount.setup();
 		SelectAvatarPopup.setup();
 		
-		TopBar.setup({viewport: SceneContainer});
+		TopBarWidget.setup({viewport: SceneContainer});
 		CurrentSessionWidget.setup();
 		HelpAndTroubleReportWidget.setup();
 		LoginWidget.setup();
 		LoginWidget.focus();
 		
-		TopBar.showWidget(LoginWidget);
-		TopBar.showWidget(HelpAndTroubleReportWidget);
+		TopBarWidget.show(LoginWidget);
+		TopBarWidget.show(HelpAndTroubleReportWidget);
 	}
 }

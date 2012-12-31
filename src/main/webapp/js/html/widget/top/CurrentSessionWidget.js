@@ -19,7 +19,7 @@ var CurrentSessionWidget = {
 		Session.set(null);
 		
 		LoginWidget.clear();
-		TopBar.hideWidget(CurrentSessionWidget);		TopBar.showWidget(LoginWidget);
+		TopBarWidget.hide(CurrentSessionWidget);		TopBarWidget.show(LoginWidget);
 	},
 	
 	logout: function() {

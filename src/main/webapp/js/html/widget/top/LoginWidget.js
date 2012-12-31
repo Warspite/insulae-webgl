@@ -39,8 +39,8 @@ var LoginWidget = {
 	
 	loginSucceeded: function(result, self) {
 		Session.set({id: result.content.id, key: result.content.key});
-		TopBar.hideWidget(LoginWidget);
-		TopBar.showWidget(CurrentSessionWidget);
+		TopBarWidget.hide(LoginWidget);
+		TopBarWidget.show(CurrentSessionWidget);
 		
 		Server.req({
 			servlet: "account/Account", 
