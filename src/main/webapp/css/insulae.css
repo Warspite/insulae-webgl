@@ -69,14 +69,29 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 	position: absolute;
 	right: 0px;
 	bottom: 0px;
+	z-index: 2;
 	background-image: url('../images/widgets/bottomRightBar.png');
 }
 
 #minimapWidget {
 	width: 339px;
-	height: 138px;
+	height: 160px;
 	position: absolute;
 	right: 41px;
 	bottom: 0px;
+	z-index: 1;
 	background-image: url('../images/widgets/minimapBackground.png');
+}
+
+#realmName {
+	position: absolute;
+	left: 8px;
+	top: 7px;
+	color: #85827f;
+	font-weight: bold;
+}
+
+.minimapAreaIcon {
+	position: absolute;
+	cursor: pointer;
 }

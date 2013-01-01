@@ -35,6 +35,8 @@ include("util/UtilityFunctions.js");
 
 include("html/widget/Widget.js");
 
+include("html/widget/bottomRight/MinimapWidget.js");
+
 include("html/widget/popup/CreateAvatarPopup.js");
 include("html/widget/popup/CreateTroubleReport.js");
 include("html/widget/popup/ErrorMessage.js");

@@ -12,8 +12,9 @@ var StaticData = {
 	},
 	 
 	load: function(p) {
-		StaticData.progress = Params.check(p, null, {target: 15, completed: 0, progressCallback: null, completionCallback: null, completionReported: false});
+		StaticData.progress = Params.check(p, null, {target: 16, completed: 0, progressCallback: null, completionCallback: null, completionReported: false});
 		
+		Server.req({servlet: "geography/AreaType", successCallback: StaticData.areaTypesLoaded});
 		Server.req({servlet: "geography/LocationType", successCallback: StaticData.locationTypesLoaded});
 		Server.req({servlet: "geography/TransportationType", successCallback: StaticData.transportationTypesLoaded});
 		Server.req({servlet: "geography/TransportationCost", successCallback: StaticData.transportationCostsLoaded});
@@ -31,77 +32,82 @@ var StaticData = {
 		Server.req({servlet: "meta/TroubleReportType", successCallback: StaticData.troubleReportTypesLoaded});
 	},
 	
-	locationTypesLoaded: function(result, progressMeter) {
+	areaTypesLoaded: function(result) {
+		StaticData.areaTypes = Server.mapify(result.content.areaTypes);
+		StaticData.tickProgress();
+	},
+
+	locationTypesLoaded: function(result) {
 		StaticData.locationTypes = Server.mapify(result.content.locationTypes);
 		StaticData.tickProgress();
 	},
 
-	transportationTypesLoaded: function(result, progressMeter) {
+	transportationTypesLoaded: function(result) {
 		StaticData.transportationTypes = Server.mapify(result.content.transportationTypes);
 		StaticData.tickProgress();
 	},
 
-	transportationCostsLoaded: function(result, progressMeter) {
+	transportationCostsLoaded: function(result) {
 		StaticData.transportationCosts = result.content.transportationCosts;
 		StaticData.tickProgress();
 	},
 
-	resourceTypesLoaded: function(result, progressMeter) {
+	resourceTypesLoaded: function(result) {
 		StaticData.resourceTypes = Server.mapify(result.content.resourceTypes);
 		StaticData.tickProgress();
 	},
 	
-	buildingTypesLoaded: function(result, progressMeter) {
+	buildingTypesLoaded: function(result) {
 		StaticData.buildingTypes = Server.mapify(result.content.buildingTypes);
 		StaticData.tickProgress();
 	},
 
-	itemTypesLoaded: function(result, progressMeter) {
+	itemTypesLoaded: function(result) {
 		StaticData.itemTypes = Server.mapify(result.content.itemTypes);
 		StaticData.tickProgress();
 	},
 
-	realmsLoaded: function(result, progressMeter) {
+	realmsLoaded: function(result) {
 		StaticData.realms = Server.mapify(result.content.realms);
 		StaticData.tickProgress();
 	},
 
-	racesLoaded: function(result, progressMeter) {
+	racesLoaded: function(result) {
 		StaticData.races = Server.mapify(result.content.races);
 		StaticData.tickProgress();
 	},
 
-	sexesLoaded: function(result, progressMeter) {
+	sexesLoaded: function(result) {
 		StaticData.sexes = Server.mapify(result.content.sexes);
 		StaticData.tickProgress();
 	},
 
-	actionsLoaded: function(result, progressMeter) {
+	actionsLoaded: function(result) {
 		StaticData.actions = Server.mapify(result.content.actions);
 		StaticData.tickProgress();
 	},
 
-	actionItemCostsLoaded: function(result, progressMeter) {
+	actionItemCostsLoaded: function(result) {
 		StaticData.actionItemCosts = result.content.actionItemCosts;
 		StaticData.tickProgress();
 	},
 
-	actionItemOutputsLoaded: function(result, progressMeter) {
+	actionItemOutputsLoaded: function(result) {
 		StaticData.actionItemOutputs = result.content.actionItemOutputs;
 		StaticData.tickProgress();
 	},
 
-	resourcesRequiredNearActionTargetLocationLoaded: function(result, progressMeter) {
+	resourcesRequiredNearActionTargetLocationLoaded: function(result) {
 		StaticData.resourcesRequiredNearActionTargetLocation = Server.mapify(result.content.resourcesRequiredNearActionTargetLocation, "actionId");
 		StaticData.tickProgress();
 	},
 
-	locationTypesRequiredNearActionTargetLocationLoaded: function(result, progressMeter) {
+	locationTypesRequiredNearActionTargetLocationLoaded: function(result) {
 		StaticData.locationTypesRequiredNearActionTargetLocation = Server.mapify(result.content.locationTypesRequiredNearActionTargetLocation, "actionId");
 		StaticData.tickProgress();
 	},
 
-	troubleReportTypesLoaded: function(result, progressMeter) {
+	troubleReportTypesLoaded: function(result) {
 		StaticData.troubleReportTypes = result.content.troubleReportTypes;
 		StaticData.tickProgress();
 	},

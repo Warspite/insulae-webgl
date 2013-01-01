@@ -19,6 +19,7 @@ var CurrentSessionWidget = {
 		Session.set(null);
 		
 		LoginWidget.clear();
+		MinimapWidget.clear();
 		TopBarWidget.hide(CurrentSessionWidget);		TopBarWidget.show(LoginWidget);
 	},
 	
@@ -53,6 +54,6 @@ var CurrentSessionWidget = {
 	
 	avatarSelected: function(avatar) {
 		Session.currentAvatar = avatar;
-		console.log('Avatar selected: ' + avatar.name);
+		MinimapWidget.realmSelected(StaticData.realms[avatar.realmId]);
 	}
 };
