@@ -19,21 +19,18 @@ var THREExt = {
 		});
 	},
 	
-	loadMeshAsync : function(params) {
-		if(!params.path)
-			throw "Missing required parameter: path";
-			
-		var x = params.x || 0;
-		var y = params.y || 0;
-		var z = params.z || 0;
-		var callback = params.callback || function(mesh) { SceneContainer.addToScene(mesh); };
+	loadMeshAsync : function(p) {
+		var params = Params.check(p, ['path'], {x: 0, y: 0, z: 0, properties: {}, callback: function(mesh) { SceneContainer.addToScene(mesh);}});
 			
 		THREExt.loader.load(Paths.MESH_ROOT + params.path, function(collada) {
 			var mesh = collada.scene;
-			mesh.position.set(x, y, z);
+			mesh.position.set(params.x, params.y, params.z);
 			mesh.updateMatrix();
-			mesh.mouseVisible = true;
-			callback(mesh);
+
+			for(i in params.properties)
+				mesh[i] = params.properties[i];
+
+			params.callback(mesh);
 		}); 
 	}
 };

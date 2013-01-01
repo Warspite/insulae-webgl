@@ -52,6 +52,7 @@ include("html/widget/top/TopBarWidget.js");
 
 include("html/util/FormUtility.js");
 include("html/util/HtmlInit.js");
+include("html/util/Tooltip.js");
 
 include("Overloads.js");
 include("Init.js");

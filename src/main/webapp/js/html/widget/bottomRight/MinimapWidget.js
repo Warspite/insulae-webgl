@@ -31,7 +31,7 @@ var MinimapWidget = {
 			var y = MinimapWidget.mapArea.top + (mapSize.height/2)*(1 + area.coordinatesY / 100);
 			
 			$('#areaIconContainer').append(
-				$('<img/>').attr('src', png).attr('alt', area.name).addClass('minimapAreaIcon').css({
+				$('<img/>').attr('src', png).attr('mouseVisible', true).attr('tooltip', area.name).addClass('minimapAreaIcon').css({
 					left: x,
 					top: y,
 					width: MinimapWidget.iconSize.width,

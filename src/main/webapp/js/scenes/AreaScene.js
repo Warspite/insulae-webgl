@@ -55,6 +55,6 @@ AreaScene.prototype.addSky = function(area) {
 AreaScene.prototype.addLocations = function(area) {
 	$.each(DynamicData.locationsByArea[area.id], function(index, l) {
 		var lType = StaticData.locationTypes[l.locationTypeId];
-		THREExt.loadMeshAsync({path: "location/" + lType.canonicalName + ".dae", x: 10 * l.coordinatesX, y: 10 * l.coordinatesY}); 
+		THREExt.loadMeshAsync({path: "location/" + lType.canonicalName + ".dae", x: 10 * l.coordinatesX, y: 10 * l.coordinatesY, properties: {mouseVisible: true, tooltip: lType.name}}); 
 	});
 };

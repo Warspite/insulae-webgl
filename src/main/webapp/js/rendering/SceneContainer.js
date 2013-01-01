@@ -1,7 +1,9 @@
 var SceneContainer = {
+	id: 'sceneContainer',
+	
 	init : function(keyboard) {
-		SceneContainer.$domElement = $('#sceneContainer');
-		SceneContainer.domElement = SceneContainer.$domElement[0];
+		SceneContainer.jqElement = $('#' + SceneContainer.id);
+		SceneContainer.domElement = SceneContainer.jqElement[0];
 		SceneContainer.renderer = new THREE.WebGLRenderer();
 		SceneContainer.camera = new THREE.PerspectiveCamera(45, 1.0, 0.1, 999999);
 		SceneContainer.camera.position.setZ(300);
@@ -12,7 +14,7 @@ var SceneContainer = {
 
 		SceneContainer.sceneObjects = new Array();
 
-		SceneContainer.$domElement.append(SceneContainer.renderer.domElement);
+		SceneContainer.jqElement.append(SceneContainer.renderer.domElement);
 
 		SceneContainer.scene.add(SceneContainer.camera);
 

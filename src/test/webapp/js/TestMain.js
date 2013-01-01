@@ -30,9 +30,15 @@ function generalMock() {
 	
 	THREExt.loader = {
 		load : function(path, callback) {
-			var mesh = new THREE.Mesh(new THREE.SphereGeometry(5.0, 16, 16), THREExt.material({color: 0xff0000}));
-			callback({scene: mesh});
+			var o = new THREE.Mesh(new THREE.SphereGeometry(5.0, 16, 16), THREExt.material({color: 0xff0000}));
+			var mesh = {scene: o};
+			mesh.position.set(params.x, params.y, params.z);
+			mesh.updateMatrix();
+
+			for(i in params.properties)
+				mesh[i] = params.properties[i];
+			callback(mesh);
 		}
-	};	
+	};
 }
 
