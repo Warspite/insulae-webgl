@@ -11,6 +11,7 @@ var SceneContainer = {
 		SceneContainer.lastInnerWidth = 0;
 		SceneContainer.lastInnerHeight = 0;
 		SceneContainer.lastRenderCycle = new Date().getTime();
+		SceneContainer.director = null;
 
 		SceneContainer.sceneObjects = new Array();
 
@@ -57,19 +58,33 @@ var SceneContainer = {
 		SceneContainer.sceneObjects.push(o);
 	},
 
-	removeFromScene : function(o) {
+	removeObject : function(o) {
 		SceneContainer.sceneObjects = jQuery.grep(SceneContainer.sceneObjects, function(value) {
 			return value != o;
 		});
 
+		SceneContainer.dispose(o);
+	},
+	
+	removeAndDispose: function(o) {
 		SceneContainer.scene.remove(o);
-		SceneContainer.renderer.deallocateObject(o);
+		//SceneContainer.dispose(o);
+	},
+	
+	dispose: function(o) {
+		if(o.geometry)
+			SceneContainer.dispose(o.geometry);
+			
+		if(o.material)
+			SceneContainer.dispose(o.material);
+		
+		if(o.dispose)
+			o.dispose();
 	},
 
-	clearScene : function() {
+	clearObjects : function() {
 		$.each(SceneContainer.sceneObjects, function(index, o) {
-			SceneContainer.scene.remove(o);
-			SceneContainer.renderer.deallocateObject(o);
+			SceneContainer.dispose(o);
 		});
 
 		SceneContainer.sceneObjects = new Array();
@@ -100,5 +115,12 @@ var SceneContainer = {
 	
 	getSize : function() {
 		return {width: SceneContainer.renderer.context.drawingBufferWidth, height: SceneContainer.renderer.context.drawingBufferHeight};
+	},
+	
+	setDirector: function(director) {
+		SceneContainer.clearObjects();
+		SceneContainer.director = director;
+		if(SceneContainer.director)
+			SceneContainer.director.populate();
 	}
 };

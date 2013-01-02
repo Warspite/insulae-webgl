@@ -2,7 +2,7 @@ var colladaLoaded = function() {
 	include("rendering/SceneContainer.js");
 	include("rendering/THREExt.js");
 
-	include("scenes/AreaScene.js");
+	include("director/AreaDirector.js");
 };
 
 var threeLoaded = function() {

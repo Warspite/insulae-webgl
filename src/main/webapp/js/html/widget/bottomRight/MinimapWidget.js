@@ -8,6 +8,7 @@ var MinimapWidget = {
 	clear: function() {
 		$('#realmName').html('');
 		$('#areaIconContainer').empty();
+		MinimapWidget.selectedAreaIcon.css('visibility', 'collapse');
 	},
 	
 	setup: function() {
@@ -42,8 +43,12 @@ var MinimapWidget = {
 	},
 	
 	areaSelected: function(area, areaIcon) {
-		console.log("Area selected: " + area.name);
 		MinimapWidget.positionAreaSelectionMarker(areaIcon);
+		
+		if(area)
+			SceneContainer.setDirector(new AreaDirector(area));
+		else
+			SceneContainer.setDirector(null);
 	},
 	
 	positionAreaSelectionMarker: function(areaIcon) {

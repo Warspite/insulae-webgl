@@ -1,24 +1,29 @@
-var AreaScene = function(area) {
+var AreaDirector = function(area) {
 	this.area = area;
 };
 
-AreaScene.sunSpeed = 0.0001;
-AreaScene.sunDistance = 500;
+AreaDirector.sunSpeed = 0.0001;
+AreaDirector.sunDistance = 500;
 
-AreaScene.prototype.populateScene = function(area) {
-	this.addSunAndMoon(area);
-	this.addSky(area);
-	this.addOcean(area);	this.addLocations(area);
+AreaDirector.prototype.populate = function() {
+	this.addSunAndMoon();
+	this.addSky();
+	this.addOcean();
 	
-};
+	var self = this;
+	Server.req({
+		servlet: "geography/Location",
+		params: {areaId: this.area.id},
+		successCallback: function(result) { self.locationsLoaded(result.content.locations) }
+	});};
 
-AreaScene.prototype.addOcean = function(area) {
+AreaDirector.prototype.addOcean = function() {
 	var ocean = new THREE.Mesh(new THREE.PlaneGeometry(1000, 1000), THREExt.material({color: 0x6060ff}));
 	ocean.position = new THREE.Vector3(0, 0, -10);
 	SceneContainer.addToScene(ocean);
 };
 
-AreaScene.prototype.addSunAndMoon = function(area) {
+AreaDirector.prototype.addSunAndMoon = function() {
 	var sunLight = new THREE.PointLight(0xffe993);
 	sunLight.totalElapsedTime = 0;
 
@@ -26,8 +31,8 @@ AreaScene.prototype.addSunAndMoon = function(area) {
 		self.totalElapsedTime += ms;
 		self.position = new THREE.Vector3(
 			0,
-			AreaScene.sunDistance * Math.sin(self.totalElapsedTime * AreaScene.sunSpeed),
-			AreaScene.sunDistance * Math.cos(self.totalElapsedTime * AreaScene.sunSpeed)
+			AreaDirector.sunDistance * Math.sin(self.totalElapsedTime * AreaDirector.sunSpeed),
+			AreaDirector.sunDistance * Math.cos(self.totalElapsedTime * AreaDirector.sunSpeed)
 		);
 	};
 
@@ -38,8 +43,8 @@ AreaScene.prototype.addSunAndMoon = function(area) {
 		self.totalElapsedTime += ms;
 		self.position = new THREE.Vector3(
 			0,
-			-AreaScene.sunDistance * Math.sin(self.totalElapsedTime * AreaScene.sunSpeed),
-			-AreaScene.sunDistance * Math.cos(self.totalElapsedTime * AreaScene.sunSpeed)
+			-AreaDirector.sunDistance * Math.sin(self.totalElapsedTime * AreaDirector.sunSpeed),
+			-AreaDirector.sunDistance * Math.cos(self.totalElapsedTime * AreaDirector.sunSpeed)
 		);
 	};
 
@@ -47,13 +52,13 @@ AreaScene.prototype.addSunAndMoon = function(area) {
 	SceneContainer.addToScene(moonLight);
 };
 
-AreaScene.prototype.addSky = function(area) {
+AreaDirector.prototype.addSky = function() {
 	var material = THREExt.material({image: "sky/posx.jpg", color: 0x8080ff});
 	material.side = THREE.BackSide;
 	SceneContainer.addToScene(new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), material));};
 
-AreaScene.prototype.addLocations = function(area) {
-	$.each(DynamicData.locationsByArea[area.id], function(index, l) {
+AreaDirector.prototype.locationsLoaded = function(locations) {
+	$.each(locations, function(index, l) {
 		var lType = StaticData.locationTypes[l.locationTypeId];
 		THREExt.loadMeshAsync({path: "location/" + lType.canonicalName + ".dae", x: 10 * l.coordinatesX, y: 10 * l.coordinatesY, properties: {mouseVisible: true, tooltip: lType.name}}); 
 	});
