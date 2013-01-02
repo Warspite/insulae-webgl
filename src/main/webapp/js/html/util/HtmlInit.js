@@ -7,6 +7,7 @@ var HtmlInit = {
 		RegisterAccount.setup();
 		SelectAvatarPopup.setup();
 		
+		BottomRightBarWidget.setup();
 		TopBarWidget.setup({viewport: SceneContainer});
 		CurrentSessionWidget.setup();
 		HelpAndTroubleReportWidget.setup();

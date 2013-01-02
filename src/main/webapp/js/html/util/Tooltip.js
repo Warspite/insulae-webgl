@@ -44,7 +44,7 @@ var Tooltip = {
 	determinePosition: function() {
 		var p = {
 			left: Mouse.instance.current.x - $('#tooltip').width() / 2, 
-			top: Mouse.instance.current.y - $('#tooltip').height() - 5  
+			top: Mouse.instance.current.y - $('#tooltip').height() - 25  
 		};
 		
 		if(p.top < 0)

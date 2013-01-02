@@ -63,14 +63,24 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 	height: 100px;
 }
 
-#bottomRightWidget {
+#bottomRightBarWidget {
 	width: 41px;
 	height: 243px;
 	position: absolute;
 	right: 0px;
 	bottom: 0px;
-	z-index: 2;
+	z-index: 1;
 	background-image: url('../images/widgets/bottomRightBar.png');
+}
+
+#minimapToggleButton {
+	width: 26px;
+	height: 26px;
+	position: absolute;
+	right: 7px;
+	bottom: 5px;
+	background-image: url('../images/icon/minusButton.png');
+	cursor: pointer;
 }
 
 #minimapWidget {
@@ -79,7 +89,7 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 	position: absolute;
 	right: 41px;
 	bottom: 0px;
-	z-index: 1;
+	z-index: 0;
 	background-image: url('../images/widgets/minimapBackground.png');
 }
 
@@ -89,6 +99,13 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 	top: 7px;
 	color: #85827f;
 	font-weight: bold;
+}
+
+#selectedAreaIcon {
+	z-index: -1;
+	background-image: url('../images/icon/selectedAreaIcon.gif');
+	visibility: visible;
+	position: absolute;
 }
 
 .minimapAreaIcon {

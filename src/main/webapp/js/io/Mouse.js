@@ -23,8 +23,8 @@ var Mouse = function()
 	SceneContainer.scene.add(this.hoverHighlight);
 	
 	Mouse.instance = this;
-	$('*').live('mouseenter', function(e) { if($(this).attr('mouseVisible')) Mouse.instance.hoveredDomElement = this; });
-	$('*').live('mouseleave', function(e) { if(this == Mouse.instance.hoveredDomElement) Mouse.instance.hoveredDomElement = null; });
+	$('.mouseVisible').live('mouseenter', function(e) { Mouse.instance.hoveredDomElement = this; });
+	$('.mouseVisible').live('mouseleave', function(e) { if(this == Mouse.instance.hoveredDomElement) Mouse.instance.hoveredDomElement = null; });
 	$(document).live('mousemove', function(e) { Mouse.instance.current = {x: e.pageX, y: e.pageY};});
 	
 	SceneContainer.domElement.addEventListener("mousedown", function(e){ Mouse.instance.mouseEventHandler(e); }, false);

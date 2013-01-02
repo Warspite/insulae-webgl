@@ -35,6 +35,7 @@ include("util/UtilityFunctions.js");
 
 include("html/widget/Widget.js");
 
+include("html/widget/bottomRight/BottomRightBarWidget.js");
 include("html/widget/bottomRight/MinimapWidget.js");
 
 include("html/widget/popup/CreateAvatarPopup.js");

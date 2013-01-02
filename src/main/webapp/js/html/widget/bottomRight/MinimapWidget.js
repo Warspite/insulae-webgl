@@ -1,7 +1,8 @@
 var MinimapWidget = {
 	id: 'minimapWidget',
+	selectedAreaIcon: $('#selectedAreaIcon'),
 	
-	iconSize: {width: 12, height: 12},
+	iconSize: {width: 18, height: 18},
 	mapArea: {left: 17, top: 28, bottom: 147, right: 334},
 	
 	clear: function() {
@@ -31,12 +32,31 @@ var MinimapWidget = {
 			var y = MinimapWidget.mapArea.top + (mapSize.height/2)*(1 + area.coordinatesY / 100);
 			
 			$('#areaIconContainer').append(
-				$('<img/>').attr('src', png).attr('mouseVisible', true).attr('tooltip', area.name).addClass('minimapAreaIcon').css({
+				$('<img/>').attr('src', png).addClass('mouseVisible').attr('tooltip', area.name).addClass('minimapAreaIcon').click(function() { MinimapWidget.areaSelected(area, $(this)); }).css({
 					left: x,
 					top: y,
 					width: MinimapWidget.iconSize.width,
 					height: MinimapWidget.iconSize.height})
 			);
 		});
+	},
+	
+	areaSelected: function(area, areaIcon) {
+		console.log("Area selected: " + area.name);
+		MinimapWidget.positionAreaSelectionMarker(areaIcon);
+	},
+	
+	positionAreaSelectionMarker: function(areaIcon) {
+		var bounds = {
+			left: areaIcon.position().left - 2,
+			top: areaIcon.position().top - 2,
+			width: areaIcon.width() + 4,
+			height: areaIcon.height() + 4 
+		};
+		
+		MinimapWidget.selectedAreaIcon.css({
+			visibility: 'visible',
+			'background-size': '' + bounds.width + 'px ' + bounds.height + 'px'
+		}).css(bounds);
 	}
 };
