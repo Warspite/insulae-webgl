@@ -13,10 +13,7 @@ var TopBarWidget = {
 		$('#' + w.id).css("height", "0px");
 	},
 	
-	setup: function(p) {
-		var params = Params.check(p, ['viewport'])
-
-		setInterval(function(){ $("#" + TopBarWidget.id).css("width", params.viewport.getSize().width); }, 100);
+	setup: function() {
 	},
 	
 };

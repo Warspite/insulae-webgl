@@ -1,7 +1,6 @@
 var Params = {
 	check: function(inParams, requiredParams, defaultParams) {
-		if(!inParams)
-			throw "Received invalid parameters object.";
+		inParams = inParams || {};
 			
 		if(requiredParams) {
 			$.each(requiredParams, function(index, p) {

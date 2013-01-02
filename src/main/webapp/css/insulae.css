@@ -7,7 +7,7 @@ body { overflow:hidden; }
 table { border: 0px; cellspacing: 0px; cellpadding: 0px; text-align: left; }
 input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; font: '11px Arial'; font-color: #454570; }
 
-#topBarWidget { background-image: url('../images/widgets/topBar.png'); background-repeat: repeat-x; height: 32px; width: 400px; }
+#topBarWidget { background-image: url('../images/widgets/topBar.png'); background-repeat: repeat-x; height: 32px; width: 100%; }
 #loginButton { width: 60px; }
 
 .ajaxSpinner { width: 24px; height: 24px; float: left; visibility: collapse; background-image: url('../images/ajax-spinner.gif'); background-size: 24px 24px; }

@@ -46,12 +46,17 @@ var MinimapWidget = {
 		MinimapWidget.positionAreaSelectionMarker(areaIcon);
 		
 		if(area)
-			SceneContainer.setDirector(new AreaDirector(area));
+			Viewport.setActorManager(new AreaActorManager(area));
 		else
-			SceneContainer.setDirector(null);
+			Viewport.setActorManager(null);
 	},
 	
 	positionAreaSelectionMarker: function(areaIcon) {
+		if(!areaIcon) {
+			MinimapWidget.selectedAreaIcon.css('visibility', 'collapse');
+			return;
+		}
+		
 		var bounds = {
 			left: areaIcon.position().left - 2,
 			top: areaIcon.position().top - 2,

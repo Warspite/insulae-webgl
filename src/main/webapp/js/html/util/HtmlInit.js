@@ -8,7 +8,7 @@ var HtmlInit = {
 		SelectAvatarPopup.setup();
 		
 		BottomRightBarWidget.setup();
-		TopBarWidget.setup({viewport: SceneContainer});
+		TopBarWidget.setup();
 		CurrentSessionWidget.setup();
 		HelpAndTroubleReportWidget.setup();
 		LoginWidget.setup();

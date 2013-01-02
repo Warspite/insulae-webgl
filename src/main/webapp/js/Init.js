@@ -3,15 +3,18 @@ var Init = {
 		Overloads.run();
 		
 		var keyboard = new Keyboard();
-		DynamicData.setup();
-		SceneContainer.init(keyboard);
 		var mouse = new Mouse();
 		
+		Viewport.setRenderer(ThreeRenderer);
+
+		DynamicData.setup();
 		StaticData.load({completionCallback: Init.staticDataLoaded});
 		DynamicData.setup();
+		
+		Heartbeat.beat();
 	},
 	
 	staticDataLoaded : function() {
 		HtmlInit.run();
-	}
+	},
 }

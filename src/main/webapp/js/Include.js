@@ -1,8 +1,11 @@
 var colladaLoaded = function() {
-	include("rendering/SceneContainer.js");
-	include("rendering/THREExt.js");
+	include("rendering/Viewport.js");
+	include("rendering/three/ThreeRenderer.js");
+	include("rendering/three/THREExt.js");
 
-	include("director/AreaDirector.js");
+	include("rendering/three/viewer/ThreeAreaViewer.js");
+	
+	include("rendering/actorManager/AreaActorManager.js");
 };
 
 var threeLoaded = function() {
@@ -55,5 +58,6 @@ include("html/util/FormUtility.js");
 include("html/util/HtmlInit.js");
 include("html/util/Tooltip.js");
 
+include("Heartbeat.js");
 include("Overloads.js");
 include("Init.js");

@@ -19,25 +19,25 @@ var Mouse = function()
 	
 	this.projector = new THREE.Projector();
 	
-	this.hoverHighlight = new THREE.PointLight(0xffffff, 0, 200);
-	SceneContainer.scene.add(this.hoverHighlight);
+//	this.hoverHighlight = new THREE.PointLight(0xffffff, 0, 200);
+//	SceneContainer.scene.add(this.hoverHighlight);
 	
 	Mouse.instance = this;
 	$('.mouseVisible').live('mouseenter', function(e) { Mouse.instance.hoveredDomElement = this; });
 	$('.mouseVisible').live('mouseleave', function(e) { if(this == Mouse.instance.hoveredDomElement) Mouse.instance.hoveredDomElement = null; });
 	$(document).live('mousemove', function(e) { Mouse.instance.current = {x: e.pageX, y: e.pageY};});
 	
-	SceneContainer.domElement.addEventListener("mousedown", function(e){ Mouse.instance.mouseEventHandler(e); }, false);
-	SceneContainer.domElement.addEventListener("mouseup", function(e){ Mouse.instance.mouseEventHandler(e); }, false);
-	SceneContainer.domElement.addEventListener("DOMMouseScroll", function(e){ Mouse.instance.mouseScrollHandler(e); }, false);
-	SceneContainer.domElement.addEventListener("mousewheel", function(e){ Mouse.instance.mouseScrollHandler(e); }, false);
+//	SceneContainer.domElement.addEventListener("mousedown", function(e){ Mouse.instance.mouseEventHandler(e); }, false);
+//	SceneContainer.domElement.addEventListener("mouseup", function(e){ Mouse.instance.mouseEventHandler(e); }, false);
+//	SceneContainer.domElement.addEventListener("DOMMouseScroll", function(e){ Mouse.instance.mouseScrollHandler(e); }, false);
+//	SceneContainer.domElement.addEventListener("mousewheel", function(e){ Mouse.instance.mouseScrollHandler(e); }, false);
 	this.timeOfLastTick = new Date().getTime();
 	Mouse.instance.tick();
 };
 
-Mouse.prototype.sceneCoordinates = function() {
-	var scenePosition = SceneContainer.jqElement.position();
-	return {x: this.current.x - scenePosition.left, y: this.current.y - scenePosition.top};
+Mouse.prototype.coordinatesInViewport = function() {
+	var p = Viewport.element.position();
+	return {x: this.current.x - p.left, y: this.current.y - p.top};
 };
 
 Mouse.prototype.mouseScrollHandler = function(e) {
@@ -113,10 +113,10 @@ Mouse.prototype.updatePointedAtObject = function() {
 	if(this.hoveredDomElement != null) {
 		this.pointedAtObject = this.hoveredDomElement;
 	}
-	else {
-		this.pointedAtObject = this.getPointedAtSceneObject();
-		this.highlightHoveredObject();
-	}
+//	else {
+//		this.pointedAtObject = this.getPointedAtSceneObject();
+//		this.highlightHoveredObject();
+//	}
 	
 	if(this.pointedAtObject != this.lastPointedAtObject)
 		this.pointedAtObjectChangeTime = new Date().getTime();
@@ -124,34 +124,34 @@ Mouse.prototype.updatePointedAtObject = function() {
 	Tooltip.update(this.pointedAtObject, this.pointedAtObjectChangeTime);
 };
 
-Mouse.prototype.getPointedAtSceneObject = function() {
-	var sceneCoordinates = this.sceneCoordinates();
-	var mouse2dCoordinates = new THREE.Vector3(
-		(sceneCoordinates.x / SceneContainer.renderer.context.drawingBufferWidth) * 2 - 1,
-		-(sceneCoordinates.y / SceneContainer.renderer.context.drawingBufferHeight) * 2 + 1,
-		0.5);
-	
-	var mouse3dCoordinates = this.projector.unprojectVector(mouse2dCoordinates, SceneContainer.camera);
-	var mouseRaycaster = new THREE.Raycaster(SceneContainer.camera.position, mouse3dCoordinates.subSelf(SceneContainer.camera.position).normalize());
-	var intersectedMeshes = mouseRaycaster.intersectObjects(SceneContainer.getAllMeshes());
-	
-	for(i in intersectedMeshes) {
-		var mesh = intersectedMeshes[i].object;
-		var o = mesh.sceneObjectAncestor || mesh;
-		if(o.mouseVisible)
-			return o;
-	}
-	
-	return null;
-};
-		
-Mouse.prototype.highlightHoveredObject = function() {
-	if(this.lastPointedAtObject != null && this.pointedAtObject == null) {
-		new TWEEN.Tween( this.hoverHighlight ).to( { intensity: 0.0 }, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
-	}
-	
-	if(this.pointedAtObject != null && this.pointedAtObject != this.lastPointedAtObject ) {
-		new TWEEN.Tween( this.hoverHighlight ).to( { intensity: 1.0 }, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
-		new TWEEN.Tween( this.hoverHighlight.position ).to( this.pointedAtObject.position, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
-	}
-};
+//Mouse.prototype.getPointedAtSceneObject = function() {
+//	var sceneCoordinates = this.sceneCoordinates();
+//	var mouse2dCoordinates = new THREE.Vector3(
+//		(sceneCoordinates.x / SceneContainer.renderer.context.drawingBufferWidth) * 2 - 1,
+//		-(sceneCoordinates.y / SceneContainer.renderer.context.drawingBufferHeight) * 2 + 1,
+//		0.5);
+//	
+//	var mouse3dCoordinates = this.projector.unprojectVector(mouse2dCoordinates, SceneContainer.camera);
+//	var mouseRaycaster = new THREE.Raycaster(SceneContainer.camera.position, mouse3dCoordinates.subSelf(SceneContainer.camera.position).normalize());
+//	var intersectedMeshes = mouseRaycaster.intersectObjects(SceneContainer.getAllMeshes());
+//	
+//	for(i in intersectedMeshes) {
+//		var mesh = intersectedMeshes[i].object;
+//		var o = mesh.sceneObjectAncestor || mesh;
+//		if(o.mouseVisible)
+//			return o;
+//	}
+//	
+//	return null;
+//};
+//		
+//Mouse.prototype.highlightHoveredObject = function() {
+//	if(this.lastPointedAtObject != null && this.pointedAtObject == null) {
+//		new TWEEN.Tween( this.hoverHighlight ).to( { intensity: 0.0 }, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+//	}
+//	
+//	if(this.pointedAtObject != null && this.pointedAtObject != this.lastPointedAtObject ) {
+//		new TWEEN.Tween( this.hoverHighlight ).to( { intensity: 1.0 }, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+//		new TWEEN.Tween( this.hoverHighlight.position ).to( this.pointedAtObject.position, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+//	}
+//};

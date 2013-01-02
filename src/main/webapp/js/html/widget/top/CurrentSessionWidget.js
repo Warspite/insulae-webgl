@@ -20,6 +20,7 @@ var CurrentSessionWidget = {
 		
 		LoginWidget.clear();
 		MinimapWidget.clear();
+		MinimapWidget.areaSelected(null, null);
 		TopBarWidget.hide(CurrentSessionWidget);		TopBarWidget.show(LoginWidget);
 	},
 	

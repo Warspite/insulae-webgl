@@ -1,4 +1,4 @@
-var SceneContainer = {
+var SceneContainerOld = {
 	id: 'sceneContainer',
 	
 	init : function(keyboard) {
