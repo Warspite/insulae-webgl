@@ -2,6 +2,7 @@ var colladaLoaded = function() {
 	include("rendering/Viewport.js");
 	include("rendering/three/ThreeRenderer.js");
 	include("rendering/three/THREExt.js");
+	include("rendering/ThreeCameraController.js");
 
 	include("rendering/three/viewer/ThreeAreaViewer.js");
 	
@@ -21,7 +22,7 @@ include("lib/RequestAnimFrame.js");
 include("data/DynamicData.js");
 include("data/StaticData.js");
 
-include("io/CameraController.js");
+include("io/InputInterpreter.js");
 include("io/Key.js");
 include("io/Keyboard.js");
 include("io/Mouse.js");

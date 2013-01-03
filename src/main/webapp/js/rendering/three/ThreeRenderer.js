@@ -4,8 +4,9 @@ var ThreeRenderer = {
 	scene: new THREE.Scene(),
 	viewer: null,
 	
-	setup: function(viewportElement) {
+	setup: function(viewportElement, inputHandler) {
 		ThreeRenderer.viewers = {'area': ThreeAreaViewer};
+		ThreeRenderer.setup(ThreeRenderer.camera);
 
 		ThreeRenderer.camera.position.setZ(300);
 		viewportElement.append(ThreeRenderer.renderer.domElement);
@@ -32,6 +33,7 @@ var ThreeRenderer = {
 	},
 	
 	render: function() {
+		ThreeCameraController.updateCamera();
 		ThreeRenderer.renderer.render(ThreeRenderer.scene, ThreeRenderer.camera);
 	},
 	

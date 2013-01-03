@@ -7,6 +7,7 @@ var Heartbeat = {
 		Heartbeat.lastBeat = heartbeat.now;
 		
 		TWEEN.update();
+		InputInterpreter.heartbeat(heartbeat);
 		Viewport.render(heartbeat);
 		
 		requestAnimFrame(Heartbeat.beat);
