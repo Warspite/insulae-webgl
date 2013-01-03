@@ -1,6 +1,6 @@
 var Viewport = {
 	element: $('#viewport'),
-	actorManager: null,
+	sceneContent: null,
 	renderer: null,
 	lastRenderCycle: new Date().getTime(),
 	
@@ -12,35 +12,34 @@ var Viewport = {
 		Viewport.renderer = renderer;
 		Viewport.renderer.setup(Viewport.element);
 		Viewport.updateSize({forced: true});
-		Viewport.setActorManager(Viewport.actorManager);
+		Viewport.setSceneContent(Viewport.sceneContent);
 	},
 	
-	setActorManager: function(actorManager) {
-		Viewport.actorManager = actorManager;
+	setSceneContent: function(sceneContent) {
+		Viewport.sceneContent = sceneContent;
 
 		if(Viewport.renderer)
-			Viewport.renderer.setActorManager(Viewport.actorManager);
+			Viewport.renderer.setSceneContent(Viewport.sceneContent);
 	},
 	
-	render : function(elapsedTime) {
+	render : function(heartbeat) {
 		Viewport.updateSize();
 		
-		if(Viewport.actorManager)
-			Viewport.actorManager.animate(elapsedTime);
-		
-		if(Viewport.renderer)
+		if(Viewport.renderer) {
+			Viewport.renderer.animate(heartbeat);
 			Viewport.renderer.render();
+		}
 	},
 	
 	updateSize: function(p) {
 		var params = Params.check(p, null, {forced: false});
 		
 		var viewportSize = {width: Viewport.element.width(), height: Viewport.element.height()};
-		var windowSize = {width: window.innerWidth, height: window.innerHeight};
+		var wantedSize = {width: window.innerWidth, height: window.innerHeight - Widget.$(TopBarWidget).height()};
 		
-		if(params.forced || viewportSize.width != windowSize.width || viewportSize.height != windowSize.height) {
-			Viewport.element.css(windowSize);
-			Viewport.renderer.resize(windowSize);
+		if(params.forced || viewportSize.width != wantedSize.width || viewportSize.height != wantedSize.height) {
+			Viewport.element.css(wantedSize);
+			Viewport.renderer.resize(wantedSize);
 		}
 	},
 };

@@ -20,7 +20,7 @@ var THREExt = {
 	},
 	
 	loadMeshAsync : function(p) {
-		var params = Params.check(p, ['path'], {x: 0, y: 0, z: 0, properties: {}, callback: function(mesh) { SceneContainer.addToScene(mesh);}});
+		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, properties: {}});
 			
 		THREExt.loader.load(Paths.MESH_ROOT + params.path, function(collada) {
 			var mesh = collada.scene;
@@ -32,5 +32,15 @@ var THREExt = {
 
 			params.callback(mesh);
 		}); 
+	},
+	
+	clearChildren: function(o) {
+		if(!o.children)
+			return;
+			
+	    for(var i = o.children.length - 1; i >= 0; i--){
+	    	THREExt.clearChildren(o.children[i]);
+	    	o.remove(o.children[i]);
+	    };		
 	}
 };

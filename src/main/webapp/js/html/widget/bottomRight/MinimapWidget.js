@@ -46,9 +46,9 @@ var MinimapWidget = {
 		MinimapWidget.positionAreaSelectionMarker(areaIcon);
 		
 		if(area)
-			Viewport.setActorManager(new AreaActorManager(area));
+			Viewport.setSceneContent(new AreaSceneContent(area));
 		else
-			Viewport.setActorManager(null);
+			Viewport.setSceneContent(null);
 	},
 	
 	positionAreaSelectionMarker: function(areaIcon) {

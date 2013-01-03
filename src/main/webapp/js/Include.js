@@ -5,7 +5,7 @@ var colladaLoaded = function() {
 
 	include("rendering/three/viewer/ThreeAreaViewer.js");
 	
-	include("rendering/actorManager/AreaActorManager.js");
+	include("rendering/sceneContent/AreaSceneContent.js");
 };
 
 var threeLoaded = function() {

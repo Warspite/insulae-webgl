@@ -1,6 +1,6 @@
 var Server = {
 	req: function(p) {
-		var params = Params.check(p, ['servlet', 'successCallback'], {type: 'GET', params: null, failureCallback: Server.defaultFailureCallback});
+		var params = Params.check(p, ['servlet', 'successCallback'], {type: 'GET', params: null, failureCallback: Server.defaultFailureCallback, callerObject: null});
 		
 		console.log("Making call to " + params.servlet + " with session: " + JSON.stringify(Session.current) + " and parameters " + JSON.stringify(params.params));
 		
@@ -14,9 +14,9 @@ var Server = {
 			error: Server.handleRequestFault,
 			success: function(result) {
 				if( result.success )
-					params.successCallback(result)
+					params.successCallback(result, params.callerObject)
 				else
-					params.failureCallback(result, params.type, params.servlet)
+					params.failureCallback(result, params.type, params.servlet, params.callerObject)
 			},
 			type: params.type
 		});

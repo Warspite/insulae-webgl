@@ -1,14 +1,14 @@
 var Heartbeat = {
 	lastBeat: new Date().getTime(),
+	beginningOfTime: new Date().getTime(),
 	
 	beat : function() {
-		var now = new Date().getTime();
-		var elapsedTime = now - Heartbeat.lastBeat;
+		var heartbeat = {now: new Date().getTime(), tickTime: new Date().getTime() - Heartbeat.lastBeat, totalTime: new Date().getTime() - Heartbeat.beginningOfTime};	
+		Heartbeat.lastBeat = heartbeat.now;
 		
 		TWEEN.update();
-		Viewport.render(elapsedTime);
+		Viewport.render(heartbeat);
 		
-		Heartbeat.lastBeat = now;
 		requestAnimFrame(Heartbeat.beat);
 	}
 }
