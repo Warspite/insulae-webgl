@@ -1,4 +1,5 @@
 var Viewport = {
+	id: 'viewport',
 	element: $('#viewport'),
 	sceneContent: null,
 	renderer: null,

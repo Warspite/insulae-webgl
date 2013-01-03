@@ -1,35 +1,24 @@
 var InputInterpreter = {
 	cameraController: null,
 	
-	setup: function(p) {
-		var params = Params.check(p, null, {keyboard: null, mouse: null});
-		InputInterpreter.keyboard = params.keyboard;
-		InputInterpreter.mouse = params.mouse;
-	},
-	
 	heartbeat: function(heartbeat) {
-		if(InputInterpreter.keyboard && InputInterpreter.cameraController)
-			InputInterpreter.doKeyboardCameraControl(heartbeat);
-			
-		if(InputInterpreter.mouse && InputInterpreter.cameraController)
-			InputInterpreter.doMouseCameraControl(heartbeat);
+		if(InputInterpreter.cameraController)
+			InputInterpreter.doCameraControl(heartbeat);
 	},
 	
-	doKeyboardCameraControl: function(heartbeat) {
+	doCameraControl: function(heartbeat) {
+		if(Keyboard.down(Key.Q)) InputInterpreter.cameraController.move({up: heartbeat.tickTime, forward: 0, right: 0}); 
+		if(Keyboard.down(Key.E)) InputInterpreter.cameraController.move({up: -heartbeat.tickTime, forward: 0, right: 0}); 
+		if(Keyboard.down(Key.W)) InputInterpreter.cameraController.move({up: 0, forward: heartbeat.tickTime, right: 0}); 
+		if(Keyboard.down(Key.S)) InputInterpreter.cameraController.move({up: 0, forward: -heartbeat.tickTime, right: 0}); 
+		if(Keyboard.down(Key.A)) InputInterpreter.cameraController.move({up: 0, forward: 0, right: -heartbeat.tickTime}); 
+		if(Keyboard.down(Key.D)) InputInterpreter.cameraController.move({up: 0, forward: 0, right: heartbeat.tickTime}); 
+		if(Keyboard.down(Key.LEFT)) InputInterpreter.cameraController.rotate({up: 0, right: heartbeat.tickTime}); 
+		if(Keyboard.down(Key.RIGHT)) InputInterpreter.cameraController.rotate({up: 0, right: -heartbeat.tickTime}); 
+		if(Keyboard.down(Key.UP)) InputInterpreter.cameraController.rotate({up: -heartbeat.tickTime, right: 0}); 
+		if(Keyboard.down(Key.DOWN)) InputInterpreter.cameraController.rotate({up: heartbeat.tickTime, right: 0}); 
 		
-		if(keyboard.down(Key.Q)) InputInterpreter.cameraController.ascend(heartbeat.tickTime); 
-		if(keyboard.down(Key.E)) InputInterpreter.cameraController.descend(heartbeat.tickTime); 
-		if(keyboard.down(Key.W)) InputInterpreter.cameraController.moveForward(heartbeat.tickTime); 
-		if(keyboard.down(Key.S)) InputInterpreter.cameraController.moveBackward(heartbeat.tickTime); 
-		if(keyboard.down(Key.A)) InputInterpreter.cameraController.moveLeft(heartbeat.tickTime); 
-		if(keyboard.down(Key.D)) InputInterpreter.cameraController.moveRight(heartbeat.tickTime); 
-		if(keyboard.down(Key.UP)) InputInterpreter.cameraController.pitchUp(heartbeat.tickTime); 
-		if(keyboard.down(Key.DOWN)) InputInterpreter.cameraController.pitchDown(heartbeat.tickTime); 
-		if(keyboard.down(Key.LEFT)) InputInterpreter.cameraController.rotateLeft(heartbeat.tickTime); 
-		if(keyboard.down(Key.RIGHT)) InputInterpreter.cameraController.rotateRight(heartbeat.tickTime); 
-	},
-	
-	doMouseCameraControl: function(heartbeat) {
-		
+		if(Mouse.mouseWheelDelta != 0) InputInterpreter.cameraController.zoom(Mouse.mouseWheelDelta * 50);
+		if(Keyboard.down(Key.CTRL)) InputInterpreter.cameraController.rotate({up: Mouse.delta.y * 20, right: -Mouse.delta.x * 1.5});
 	}
 };

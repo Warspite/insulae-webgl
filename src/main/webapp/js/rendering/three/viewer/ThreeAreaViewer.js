@@ -2,8 +2,10 @@ var ThreeAreaViewer = {
 	scene: null,
 	
 	view: function(sceneContent, scene) {
-		console.log("I'm a ThreeAreaViewer!");
 		ThreeAreaViewer.scene = scene;
+		
+		ThreeCameraController.reset();
+		ThreeCameraController.position.setZ(300);
 		
 		ThreeAreaViewer.addSunAndMoon();
 		ThreeAreaViewer.addSky();

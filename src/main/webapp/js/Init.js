@@ -2,8 +2,8 @@ var Init = {
 	run : function() {
 		Overloads.run();
 		
-		var keyboard = new Keyboard();
-		var mouse = new Mouse();
+		Keyboard.setup();
+		Mouse.setup();
 		
 		Viewport.setRenderer(ThreeRenderer);
 

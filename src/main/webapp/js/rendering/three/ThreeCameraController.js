@@ -1,10 +1,10 @@
 var ThreeCameraController = {
 	MIN_PITCH: 0.001,
-	MAX_PITCH: 1.0,
+	MAX_PITCH: 1.3,
 	MIN_ALTITUDE: 30,
 	MAX_ALTITUDE: 600,
 	TRANSLATION_SPEED: 0.002,
-	PITCH_SPEED: 0.0005,
+	PITCH_SPEED: 0.0012,
 	ROTATION_SPEED: 0.003,
 	ASCENSION_SPEED: 0.25,
 	
@@ -24,8 +24,8 @@ var ThreeCameraController = {
 	},
 	
 	updateCamera: function() {
-		ThreeCameraController.pitch = Math.min(Math.max(ThreeCameraController.pitch, ThreeInputHandler.MIN_PITCH), ThreeInputHandler.MAX_PITCH);
-		ThreeCameraController.position.z = Math.min(Math.max(ThreeCameraController.position.z, ThreeInputHandler.MIN_ALTITUDE), ThreeInputHandler.MAX_ALTITUDE);
+		ThreeCameraController.pitch = Math.min(Math.max(ThreeCameraController.pitch, ThreeCameraController.MIN_PITCH), ThreeCameraController.MAX_PITCH);
+		ThreeCameraController.position.z = Math.min(Math.max(ThreeCameraController.position.z, ThreeCameraController.MIN_ALTITUDE), ThreeCameraController.MAX_ALTITUDE);
 	
 		ThreeCameraController.camera.rotation.z = ThreeCameraController.rotation;
 		ThreeCameraController.camera.rotation.x = ThreeCameraController.pitch * Math.cos(ThreeCameraController.rotation);
@@ -36,47 +36,26 @@ var ThreeCameraController = {
 		ThreeCameraController.camera.updateProjectionMatrix();
 	},
 	
-	ascend: function(x) {
-		ThreeCameraController.position.z += x * ThreeCameraController.ASCENSION_SPEED;
+	move: function(p) {
+		var params = Params.check(p, null, {up: 0, forward: 0, right: 0});
+		
+		ThreeCameraController.position.z += params.up * ThreeCameraController.ASCENSION_SPEED;
+		
+		ThreeCameraController.position.x -= params.forward * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+		ThreeCameraController.position.y += params.forward * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+
+		ThreeCameraController.position.x += params.right * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+		ThreeCameraController.position.y += params.right * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
 	},
 	
-	descend: function(x) {
-		ThreeCameraController.position.z -= x * ThreeCameraController.ASCENSION_SPEED;
+	rotate: function(p) {
+		var params = Params.check(p, null, {up: 0, right: 0});
+		
+		ThreeCameraController.pitch +=    params.up * ThreeCameraController.PITCH_SPEED;
+		ThreeCameraController.rotation -= params.right * ThreeCameraController.ROTATION_SPEED;
 	},
-	
-	moveForward: function(x) {
-		ThreeCameraController.position.x -= x * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-		ThreeCameraController.position.y += x * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-	},
-	
-	moveBackward: function(x) {
-		ThreeCameraController.position.x += x * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-		ThreeCameraController.position.y -= x * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-	},
-	
-	strafeLeft: function(x) {
-		ThreeCameraController.position.x -= x * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-		ThreeCameraController.position.y -= x * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-	},
-	
-	strafeRight: function(x) {
-		ThreeCameraController.position.x += x * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-		ThreeCameraController.position.y += x * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-	},
-	
-	pitchUp: function(x) {
-		ThreeCameraController.pitch += x * ThreeCameraController.PITCH_SPEED;
-	},
-	
-	pitchDown: function(x) {
-		ThreeCameraController.pitch -= x * ThreeCameraController.PITCH_SPEED;
-	},
-	
-	rotateLeft: function(x) {
-		ThreeCameraController.rotation += x * ThreeCameraController.ROTATION_SPEED;
-	},
-	
-	rotateRight: function(x) {
-		ThreeCameraController.rotation -= x * ThreeCameraController.ROTATION_SPEED;
+
+	zoom: function(zoom) {
+		ThreeCameraController.move({up: -zoom});
 	},
 };

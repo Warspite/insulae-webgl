@@ -2,7 +2,7 @@ var colladaLoaded = function() {
 	include("rendering/Viewport.js");
 	include("rendering/three/ThreeRenderer.js");
 	include("rendering/three/THREExt.js");
-	include("rendering/ThreeCameraController.js");
+	include("rendering/three/ThreeCameraController.js");
 
 	include("rendering/three/viewer/ThreeAreaViewer.js");
 	
@@ -13,7 +13,11 @@ var threeLoaded = function() {
 	include("lib/ColladaLoader.js", colladaLoaded);
 };
 
-include("lib/jquery-1.7.2.min.js");
+var jqueryLoaded = function() {
+	include("lib/jquery.mousewheel.js", colladaLoaded);
+};
+
+include("lib/jquery-1.7.2.min.js", jqueryLoaded);
 //include("lib/three.min.js", threeLoaded);
 include("lib/three.js", threeLoaded);
 include("lib/Tween.js");

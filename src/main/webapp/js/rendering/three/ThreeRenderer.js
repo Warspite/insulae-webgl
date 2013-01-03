@@ -4,11 +4,10 @@ var ThreeRenderer = {
 	scene: new THREE.Scene(),
 	viewer: null,
 	
-	setup: function(viewportElement, inputHandler) {
+	setup: function(viewportElement) {
 		ThreeRenderer.viewers = {'area': ThreeAreaViewer};
-		ThreeRenderer.setup(ThreeRenderer.camera);
+		ThreeCameraController.setup(ThreeRenderer.camera);
 
-		ThreeRenderer.camera.position.setZ(300);
 		viewportElement.append(ThreeRenderer.renderer.domElement);
 	},
 	
@@ -26,7 +25,6 @@ var ThreeRenderer = {
 	},
 	
 	clear: function() {
-		console.log("Renderer clearing...");
 		ThreeRenderer.viewer = null;
 		THREExt.clearChildren(ThreeRenderer.scene);
 		ThreeRenderer.scene.add(ThreeRenderer.camera);
