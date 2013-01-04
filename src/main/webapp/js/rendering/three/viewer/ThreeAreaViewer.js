@@ -1,5 +1,6 @@
 var ThreeAreaViewer = {
 	scene: null,
+	hoverHighlight: new THREE.Mesh(new THREE.SphereGeometry(3.0, 16, 16), THREExt.material({color: 0xff0000})),
 	
 	view: function(sceneContent, scene) {
 		ThreeAreaViewer.scene = scene;
@@ -55,5 +56,22 @@ var ThreeAreaViewer = {
 				properties: {mouseVisible: true, tooltip: lType.name}
 			}); 
 		});
+	},
+	
+	highlight: function(o) {
+		if(!ThreeAreaViewer.hoverHighlight)
+			return;
+			
+		if(!o) {
+			if(ThreeAreaViewer.hoverHighlight.parent) {
+				ThreeAreaViewer.hoverHighlight.parent.remove(ThreeAreaViewer.hoverHighlight);
+			}
+		}
+		else {
+			if(!ThreeAreaViewer.hoverHighlight.parent) {
+				ThreeRenderer.scene.add(ThreeAreaViewer.hoverHighlight);
+			}
+			new TWEEN.Tween( ThreeAreaViewer.hoverHighlight.position ).to( {x: o.position.x, y: o.position.y, z: o.position.y + 8}, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
+		}
 	},
 };

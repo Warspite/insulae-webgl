@@ -3,30 +3,53 @@ var Tooltip = {
 	visible: false,
 	element: $('#tooltip'),
 	
-	update: function(pointedAtObject, pointedAtObjectChangeTime) {
+	heartbeat: function(heartbeat) {
 		var now = new Date().getTime();
-		if(pointedAtObject && now - pointedAtObjectChangeTime > Tooltip.delay || pointedAtObject == Tooltip.element)
-			Tooltip.showIfRequested(pointedAtObject);
-		else
+		var tooltipShown = Tooltip.showForAnyDomElement(now);
+		
+		if(!tooltipShown)
+			tooltipShown = Tooltip.showForAnySceneObject(now);
+			
+		
+		if(!tooltipShown)
 			Tooltip.hide();
 	},
 	
-	showIfRequested: function(pointedAtObject) {
-		if(Tooltip.visible)
+	showForAnyDomElement: function(now) {
+		var tooltipShown = false;
+		$.each(Mouse.hoveredDomElement, function(id, t) {
+			if(!t)
+				return;
+				
+			var selector = $('#' + id)
+			
+			if(!Tooltip.domElementHasTooltip(selector))
+				return;
+				
+			if(now - Tooltip.delay > t) {
+				Tooltip.show(selector.attr('tooltip'));
+				tooltipShown = true;
+			}
+		});
+		
+		return tooltipShown;
+	},
+	
+	showForAnySceneObject: function(now) {
+		if(Tooltip.sceneObjectHasTooltip(Mouse.hoveredSceneObject) && now - Tooltip.delay > Mouse.hoveredSceneObjectChangeTime) {
+			Tooltip.show(Mouse.hoveredSceneObject.tooltip);
+			return true;
+		}
+		
+		return false;
+	},
+	
+	show: function(msg) {
+		if(Tooltip.visible || !msg)
 			return;
-			
-		var msg = null;
-		if(Tooltip.isObjectDomElement(pointedAtObject))
-			msg = $(pointedAtObject).attr('tooltip') || null;
-		else
-			msg = pointedAtObject.tooltip || null;
-			
-		if(msg == null)
-			return;
-			
+
 		Tooltip.element.css('visibility', 'visible').html(msg);
 		Tooltip.element.css(Tooltip.determinePosition());
-		console.log("I should show tooltip for " + pointedAtObject);
 		Tooltip.visible = true;
 	},
 	
@@ -34,35 +57,39 @@ var Tooltip = {
 		if(!Tooltip.visible)
 			return;
 		
-		console.log("I should hide tooltip.")
-		
-		
 		Tooltip.element.css('visibility', 'collapse');
 		Tooltip.visible = false;
 	},
 	
 	determinePosition: function() {
 		var p = {
-			left: Mouse.instance.current.x - $('#tooltip').width() / 2, 
-			top: Mouse.instance.current.y - $('#tooltip').height() - 25  
+			left: Mouse.current.x - Tooltip.element.width() / 2, 
+			top: Mouse.current.y - Tooltip.element.height() - 25  
 		};
 		
 		if(p.top < 0)
-			p.top = Mouse.instance.current.y + 5;
+			p.top = Mouse.current.y + 5;
 			
 		if(p.left < 0)
 			p.left = 0;
 			
-		if(p.left + $('#tooltip').width() > $(window).width())
-			p.left = $(window).width() - $('#tooltip').width(); 
+		if(p.left + Tooltip.element.width() > $(window).width())
+			p.left = $(window).width() - Tooltip.element.width(); 
 		
 		return p;
 	},
 	
-	isObjectDomElement: function(o) {
-		if(o.hasOwnProperty('innerHTML'))
+	domElementHasTooltip: function(selector) {
+		if(selector && selector.attr('tooltip'))
 			return true;
-		else
-			return false;
+			
+		return false;
+	},
+	
+	sceneObjectHasTooltip: function(o) {
+		if(o && o.tooltip)
+			return true;
+			
+		return false;	
 	}
 };

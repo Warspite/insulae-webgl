@@ -9,6 +9,7 @@ var Heartbeat = {
 		TWEEN.update();
 		InputInterpreter.heartbeat(heartbeat);
 		Viewport.render(heartbeat);
+		Tooltip.heartbeat(heartbeat);
 		Mouse.heartbeat(heartbeat);
 		
 		requestAnimFrame(Heartbeat.beat);

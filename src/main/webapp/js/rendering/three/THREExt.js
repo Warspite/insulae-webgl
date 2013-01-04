@@ -42,5 +42,17 @@ var THREExt = {
 	    	THREExt.clearChildren(o.children[i]);
 	    	o.remove(o.children[i]);
 	    };		
-	}
+	},
+	
+	getDescendants: function(o, out, type) {
+		if(!o || !o.children)
+			return;
+		
+		$.each(o.children, function(i, c) {
+			if(!type || c instanceof type)
+				out.push(c);
+				
+			THREExt.getDescendants(c, out, type);
+		});
+	},
 };

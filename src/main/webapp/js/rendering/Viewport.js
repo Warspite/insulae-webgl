@@ -43,4 +43,14 @@ var Viewport = {
 			Viewport.renderer.resize(wantedSize);
 		}
 	},
+	
+	getSceneObjectAtWindowCoordinates: function(coordinates) {
+		if(!Viewport.renderer || !Viewport.sceneContent)
+			return null;
+		
+		var viewportCoordinates = {x: coordinates.x - Viewport.element.position().left, y: coordinates.y - Viewport.element.position().top};
+		return Viewport.renderer.getSceneObjectAtCoordinates(viewportCoordinates);
+		
+		
+	}
 };

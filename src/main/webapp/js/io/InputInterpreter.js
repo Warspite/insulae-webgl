@@ -1,9 +1,13 @@
 var InputInterpreter = {
 	cameraController: null,
+	sceneInteractor: null,
 	
 	heartbeat: function(heartbeat) {
 		if(InputInterpreter.cameraController)
 			InputInterpreter.doCameraControl(heartbeat);
+			
+		if(InputInterpreter.sceneInteractor)
+			InputInterpreter.doSceneInteraction(heartbeat);
 	},
 	
 	doCameraControl: function(heartbeat) {
@@ -20,5 +24,10 @@ var InputInterpreter = {
 		
 		if(Mouse.mouseWheelDelta != 0) InputInterpreter.cameraController.zoom(Mouse.mouseWheelDelta * 50);
 		if(Keyboard.down(Key.CTRL)) InputInterpreter.cameraController.rotate({up: Mouse.delta.y * 20, right: -Mouse.delta.x * 1.5});
-	}
+	},
+	
+	doSceneInteraction: function(heartbeat) {
+		if(Mouse.hoveredSceneObject != Mouse.lastHoveredSceneObject) InputInterpreter.sceneInteractor.hover(Mouse.hoveredSceneObject);
+		if(Mouse.clickedSceneObject) InputInterpreter.sceneInteractor.click(Mouse.clickedSceneObject);
+	}	
 };

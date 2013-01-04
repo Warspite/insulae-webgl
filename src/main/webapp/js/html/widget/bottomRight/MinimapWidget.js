@@ -33,7 +33,7 @@ var MinimapWidget = {
 			var y = MinimapWidget.mapArea.top + (mapSize.height/2)*(1 + area.coordinatesY / 100);
 			
 			$('#areaIconContainer').append(
-				$('<img/>').attr('src', png).addClass('mouseVisible').attr('tooltip', area.name).addClass('minimapAreaIcon').click(function() { MinimapWidget.areaSelected(area, $(this)); }).css({
+				$('<img/>').attr('src', png).addClass('mouseVisible').attr('id', 'area' + area.id).attr('tooltip', area.name).addClass('minimapAreaIcon').click(function() { MinimapWidget.areaSelected(area, $(this)); }).css({
 					left: x,
 					top: y,
 					width: MinimapWidget.iconSize.width,

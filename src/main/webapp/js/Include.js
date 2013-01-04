@@ -6,6 +6,8 @@ var colladaLoaded = function() {
 
 	include("rendering/three/viewer/ThreeAreaViewer.js");
 	
+	include("rendering/three/sceneInteractor/ThreeAreaInteractor.js");
+	
 	include("rendering/sceneContent/AreaSceneContent.js");
 };
 
@@ -14,7 +16,7 @@ var threeLoaded = function() {
 };
 
 var jqueryLoaded = function() {
-	include("lib/jquery.mousewheel.js", colladaLoaded);
+	include("lib/jquery.mousewheel.js");
 };
 
 include("lib/jquery-1.7.2.min.js", jqueryLoaded);
