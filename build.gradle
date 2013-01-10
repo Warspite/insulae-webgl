@@ -6,6 +6,8 @@ group = "com.warspite.insulae"
 ext.nextRelease = '0.1.0';
 ext.warspiteCommonVersion = '1.5.21';
 
+def extraWarContentsPath = 'build/tmp/extraWarContents';
+
 if (project.hasProperty("release")) {
 	version = ext.nextRelease
 } 
@@ -28,16 +30,82 @@ configurations {
 }
 
 dependencies {
-	webResources 'com.warspite.common:web:' + ext.warspiteCommonVersion
+}
+
+task concatenateJavascript << {
+	def includesFile = new File('src/main/js/includes');
+	def outDirPath = extraWarContentsPath + "/js";
+	def outFileName = project.name + ".js";
+	def outFilePath = outDirPath + "/" + outFileName;
+	def outDir = new File(outDirPath);
+	def outFile = new File(outFilePath);
+
+	outDir.mkdirs();
+	if(outFile.exists())
+		outFile.delete();
+		
+	outFile.createNewFile();
+	
+	def reader = new BufferedReader(new FileReader(includesFile));
+	def writer = new FileOutputStream(outFile);
+	def line = null;
+	def buffer = new byte[1024];
+	while((line = reader.readLine()) != null) {
+		if(line.length() == 0)
+			continue;
+	
+		def jsFile = new File('src/main/js', line);
+		if(!jsFile.exists())
+			throw new Exception("Javascript file " + jsFile + " doesn't exist.");
+			
+		def jsStream = new FileInputStream(jsFile);
+		def b = 0;
+		while((b = jsStream.read(buffer)) >= 0) {
+			def str = new String(buffer, 0, b);
+			writer.write(str.getBytes());
+			writer.flush();
+		}
+		jsStream.close();
+	}
+	
+	reader.close();
+	writer.close();
+
+	if (project.hasProperty("release")) {
+		def minFileName = outFileName + ".min";
+		def minFilePath = outDirPath + "/" + minFileName;
+		javaexec { 
+			main = '-jar'; 
+			args = ['src/tools/yuicompressor-2.4.7.jar', '--type', 'js', '-o', minFilePath, outFilePath] 
+		}
+
+		delete outFilePath;
+		copy {
+			from outDirPath
+			into outDirPath
+			rename (minFileName, outFileName) 
+		}
+		delete minFilePath;
+		
+		//def cmd = "java -jar src/tools/yuicompressor-2.4.7.jar --type js -o " + minFilePath + " " + outFilePath + ";";
+		//def cmd = "java -jar src/tools/yuicompressor-2.4.7.jar --type js -o " + minFilePath + " " + outFilePath + "; rm " + outFilePath + "; mv " + minFilePath + " " + outFilePath;
+
+		//println cmd;
+		//cmd.execute().waitFor();
+	}
 }
 
 war {
+	from new File(extraWarContentsPath)
+	
 	from { 
 		configurations.webResources.collect { 
 			it.isDirectory() ? it : zipTree(it)
 		}
 	}
 }
+
+war.dependsOn concatenateJavascript
 
 artifacts {
 	archives war
