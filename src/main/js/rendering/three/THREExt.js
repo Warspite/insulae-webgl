@@ -23,25 +23,28 @@ var THREExt = {
 	
 	loadMeshAsync : function(p) {
 		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, scale: 1.0, properties: {}});
-		params.path = "location/terrain.js";
-		params.scale = 0.0015;
 		
-		var loader = new THREE.JSONLoader();
-		loader.load( Paths.MESH_ROOT + params.path, function( geometry, materials ) {
-      		geometry.computeTangents();
-      		
-			mesh = new THREE.Mesh( geometry, new THREE.MeshLambertMaterial({color: 0x808080}));
-			mesh.position.set(params.x, params.y, params.z);
-			mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
-			mesh.updateMatrix();
-
-			for(i in params.properties)
-				mesh[i] = params.properties[i];
- 
-			params.callback(mesh);
-		});
+		// params.path = "location/buffalo.js";
+		// params.scale = 0.01;
+// 		
+		// new THREE.JSONLoader().load( Paths.MESH_ROOT + params.path, function( geometry, materials ) {
+			// var material = new THREE.MeshFaceMaterial( materials );
+			// var mesh = new THREE.SkinnedMesh(geometry, material, false );
+			// mesh.position.set(params.x, params.y, params.z);
+			// mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
+//       		
+			// var originalMaterial = materials[ 0 ];
+			// originalMaterial.skinning = true;
+			// originalMaterial.transparent = true;
+			// originalMaterial.alphaTest = 0.75;
+// 		
+			// // for(i in params.properties)
+				// // mesh[i] = params.properties[i];
+//  
+			// params.callback(mesh);
+		// });
 		
-		// new THREExt.getLoader().load(Paths.MESH_ROOT + params.path, function(collada) {
+		// THREExt.getLoader().load(Paths.MESH_ROOT + params.path, function(collada) {
 			// var mesh = collada.scene;
 			// mesh.position.set(params.x, params.y, params.z);
 			// mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
@@ -52,6 +55,20 @@ var THREExt = {
 // 
 			// params.callback(mesh);
 		// }); 
+		
+		params.path = "location/plains.js";
+		new THREE.JSONLoader().load(Paths.MESH_ROOT + params.path, function( geometry, materials ) {
+			var material = new THREE.MeshFaceMaterial( materials );
+			var mesh = new THREE.SkinnedMesh(geometry, material, false );
+			mesh.position.set(params.x, params.y, params.z);
+			mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
+      		
+			for(i in params.properties)
+				mesh[i] = params.properties[i];
+
+			params.callback(mesh);
+		}); 
+		
 	},
 	
 	clearChildren: function(o) {

@@ -1,7 +1,10 @@
 var Tooltip = {
 	delay: 750,
 	visible: false,
-	element: $('#tooltip'),
+	
+	$: function() {
+		return $('#tooltip');
+	},
 	
 	heartbeat: function(heartbeat) {
 		var now = new Date().getTime();
@@ -48,8 +51,8 @@ var Tooltip = {
 		if(Tooltip.visible || !msg)
 			return;
 
-		Tooltip.element.css('visibility', 'visible').html(msg);
-		Tooltip.element.css(Tooltip.determinePosition());
+		Tooltip.$().css('visibility', 'visible').html(msg);
+		Tooltip.$().css(Tooltip.determinePosition());
 		Tooltip.visible = true;
 	},
 	
@@ -57,14 +60,14 @@ var Tooltip = {
 		if(!Tooltip.visible)
 			return;
 		
-		Tooltip.element.css('visibility', 'collapse');
+		Tooltip.$().css('visibility', 'collapse');
 		Tooltip.visible = false;
 	},
 	
 	determinePosition: function() {
 		var p = {
-			left: Mouse.current.x - Tooltip.element.width() / 2, 
-			top: Mouse.current.y - Tooltip.element.height() - 25  
+			left: Mouse.current.x - Tooltip.$().width() / 2, 
+			top: Mouse.current.y - Tooltip.$().height() - 25  
 		};
 		
 		if(p.top < 0)
@@ -73,8 +76,8 @@ var Tooltip = {
 		if(p.left < 0)
 			p.left = 0;
 			
-		if(p.left + Tooltip.element.width() > $(window).width())
-			p.left = $(window).width() - Tooltip.element.width(); 
+		if(p.left + Tooltip.$().width() > $(window).width())
+			p.left = $(window).width() - Tooltip.$().width(); 
 		
 		return p;
 	},

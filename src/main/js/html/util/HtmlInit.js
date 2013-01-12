@@ -12,10 +12,10 @@ var HtmlInit = {
 		CurrentSessionWidget.setup();
 		HelpAndTroubleReportWidget.setup();
 		LoginWidget.setup();
-		LoginWidget.focus();
 		MinimapWidget.setup();
 		
 		TopBarWidget.show(LoginWidget);
 		TopBarWidget.show(HelpAndTroubleReportWidget);
+		LoginWidget.focus();
 	}
 }
