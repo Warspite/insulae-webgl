@@ -51,7 +51,7 @@ var ThreeRenderer = {
 	},
 	
 	getSceneObjectAtCoordinates: function(c) {
-		var mouse2dCoordinates = new THREE.Vector3((c.x / Viewport.element.width()) * 2 - 1, -(c.y / Viewport.element.height()) * 2 + 1, 0.5);
+		var mouse2dCoordinates = new THREE.Vector3((c.x / Viewport.$().width()) * 2 - 1, -(c.y / Viewport.$().height()) * 2 + 1, 0.5);
 		var mouse3dCoordinates = ThreeRenderer.projector.unprojectVector(mouse2dCoordinates, ThreeRenderer.camera);
 		var mouseRaycaster = new THREE.Raycaster(ThreeRenderer.camera.position, mouse3dCoordinates.subSelf(ThreeRenderer.camera.position).normalize());
 		var meshes = new Array();

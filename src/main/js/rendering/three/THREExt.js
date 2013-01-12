@@ -23,7 +23,8 @@ var THREExt = {
 	
 	loadMeshAsync : function(p) {
 		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, scale: 1.0, properties: {}});
-		params.path = "location/plains.js";
+		params.path = "location/terrain.js";
+		params.scale = 0.0015;
 		
 		var loader = new THREE.JSONLoader();
 		loader.load( Paths.MESH_ROOT + params.path, function( geometry, materials ) {
@@ -33,7 +34,6 @@ var THREExt = {
 			mesh.position.set(params.x, params.y, params.z);
 			mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
 			mesh.updateMatrix();
-      		group.addChild(mesh);
 
 			for(i in params.properties)
 				mesh[i] = params.properties[i];

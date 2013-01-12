@@ -1,9 +1,12 @@
 var Viewport = {
 	id: 'viewport',
-	element: $('#viewport'),
 	sceneContent: null,
 	renderer: null,
 	lastRenderCycle: new Date().getTime(),
+	
+	$: function() {
+		return $('#' + Viewport.id);
+	},
 	
 	setup: function() {
 		
@@ -11,7 +14,7 @@ var Viewport = {
 	
 	setRenderer: function(renderer) {
 		Viewport.renderer = renderer;
-		Viewport.renderer.setup(Viewport.element);
+		Viewport.renderer.setup(Viewport.$());
 		Viewport.updateSize({forced: true});
 		Viewport.setSceneContent(Viewport.sceneContent);
 	},
@@ -35,11 +38,13 @@ var Viewport = {
 	updateSize: function(p) {
 		var params = Params.check(p, null, {forced: false});
 		
-		var viewportSize = {width: Viewport.element.width(), height: Viewport.element.height()};
+		var viewportSize = {width: Viewport.$().width(), height: Viewport.$().height()};
 		var wantedSize = {width: window.innerWidth, height: window.innerHeight - Widget.$(TopBarWidget).height()};
 		
 		if(params.forced || viewportSize.width != wantedSize.width || viewportSize.height != wantedSize.height) {
-			Viewport.element.css(wantedSize);
+			Viewport.$().css(wantedSize);
+			Viewport.$().width(50);
+			Viewport.$().height(50);
 			Viewport.renderer.resize(wantedSize);
 		}
 	},
@@ -48,9 +53,9 @@ var Viewport = {
 		if(!Viewport.renderer || !Viewport.sceneContent)
 			return null;
 		
-		var viewportCoordinates = {x: coordinates.x - Viewport.element.position().left, y: coordinates.y - Viewport.element.position().top};
+		var viewportCoordinates = {x: coordinates.x - Viewport.$().position().left, y: coordinates.y - Viewport.$().position().top};
 		return Viewport.renderer.getSceneObjectAtCoordinates(viewportCoordinates);
 		
 		
-	}
+	},
 };
