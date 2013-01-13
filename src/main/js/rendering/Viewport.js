@@ -43,8 +43,6 @@ var Viewport = {
 		
 		if(params.forced || viewportSize.width != wantedSize.width || viewportSize.height != wantedSize.height) {
 			Viewport.$().css(wantedSize);
-			Viewport.$().width(50);
-			Viewport.$().height(50);
 			Viewport.renderer.resize(wantedSize);
 		}
 	},

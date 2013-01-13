@@ -52,7 +52,7 @@
 	"textures" :
 	{
 		"Texture_35_plains": {
-			"url"    : "plains.png",
+			"url"    : "forest.png",
 			"repeat" : [ 1, 1 ],
 			"offset" : [ 0, 0 ],
 			"magFilter" : "LinearFilter",

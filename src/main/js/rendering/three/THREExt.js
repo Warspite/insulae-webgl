@@ -56,12 +56,28 @@ var THREExt = {
 			// params.callback(mesh);
 		// }); 
 		
-		params.path = "location/plains.js";
-		new THREE.JSONLoader().load(Paths.MESH_ROOT + params.path, function( geometry, materials ) {
-			var material = new THREE.MeshFaceMaterial( materials );
-			var mesh = new THREE.SkinnedMesh(geometry, material, false );
+		// params.path = "location/plains.js";
+		// new THREE.JSONLoader().load(Paths.MESH_ROOT + params.path, function( geometry, materials ) {
+			// //var material = new THREE.MeshLambertMaterial( materials );
+			// var material = new THREExt.material({image: "location/grassyHills.png"})
+			// var mesh = new THREE.SkinnedMesh(geometry, material, false );
+			// mesh.position.set(params.x, params.y, params.z);
+			// mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
+//       		
+			// for(i in params.properties)
+				// mesh[i] = params.properties[i];
+// 
+			// params.callback(mesh);
+	},
+		
+	loadSceneAsync : function(p) {
+		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, scale: 1.0, properties: {}});
+
+		new THREE.SceneLoader().load(Paths.MESH_ROOT + params.path + ".js", function( result ) {
+			var mesh = result.scene;
 			mesh.position.set(params.x, params.y, params.z);
 			mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
+			mesh.updateMatrix();
       		
 			for(i in params.properties)
 				mesh[i] = params.properties[i];

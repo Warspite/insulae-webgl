@@ -48,8 +48,8 @@ var ThreeAreaViewer = {
 	addLocations: function(locations) {
 		$.each(locations, function(index, l) {
 			var lType = StaticData.locationTypes[l.locationTypeId];
-			THREExt.loadMeshAsync({
-				path: "location/" + lType.canonicalName + ".dae", 
+			THREExt.loadSceneAsync({
+				path: "location/" + lType.canonicalName, 
 				callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); }, 
 				x: l.coordinatesX, 
 				y: l.coordinatesY,
