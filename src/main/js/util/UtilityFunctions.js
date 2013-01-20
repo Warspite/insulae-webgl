@@ -58,3 +58,7 @@ size = function(obj) {
 	
 	return size;
 }
+
+now = function() {
+	return new Date().getTime();
+}

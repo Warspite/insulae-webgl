@@ -46,16 +46,35 @@ var ThreeAreaViewer = {
 	},
 	
 	addLocations: function(locations) {
-		$.each(locations, function(index, l) {
-			var lType = StaticData.locationTypes[l.locationTypeId];
-			THREExt.loadSceneAsync({
-				path: "location/" + lType.canonicalName, 
-				callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); }, 
-				x: l.coordinatesX, 
-				y: l.coordinatesY,
-				properties: {mouseVisible: true, tooltip: lType.name}
-			}); 
-		});
+		// $.each(locations, function(index, l) {
+			// var lType = StaticData.locationTypes[l.locationTypeId];
+			// THREExt.loadSceneAsync({
+				// path: "location/" + lType.canonicalName, 
+				// callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); }, 
+				// x: l.coordinatesX, 
+				// y: l.coordinatesY,
+				// properties: {mouseVisible: true, tooltip: lType.name}
+			// }); 
+		// });
+		
+		var locationsToAdd = 21 * 21;
+		var locationsAdded = 0;
+		var mergedTerrain = new THREE.Geometry();
+		for(var x = -15; x <= 15; x++) {
+			for(var y = -15; y <= 15; y++) {
+				var path = "location/plains";
+				if(x == 0)
+					path = "location/grassyHills";
+					
+				THREExt.loadSceneAsync({
+					path: path, 
+					callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); }, 
+					x: x, 
+					y: y,
+					properties: {mouseVisible: true, tooltip: "lType.name"}
+				}); 
+			}
+		}
 	},
 	
 	highlight: function(o) {

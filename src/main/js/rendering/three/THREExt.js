@@ -1,8 +1,7 @@
 var THREExt = {
-	getLoader: function() {
-		return new THREE.ColladaLoader();
-	},
-
+	sceneLoader: new THREE.SceneLoader(),
+	queuedLoadRequests: {},
+	loadedScenes: {},
 	material : function(params) {
 		if (params.image) {
 			return new THREE.MeshLambertMaterial({
@@ -21,70 +20,47 @@ var THREExt = {
 		});
 	},
 	
-	loadMeshAsync : function(p) {
-		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, scale: 1.0, properties: {}});
-		
-		// params.path = "location/buffalo.js";
-		// params.scale = 0.01;
-// 		
-		// new THREE.JSONLoader().load( Paths.MESH_ROOT + params.path, function( geometry, materials ) {
-			// var material = new THREE.MeshFaceMaterial( materials );
-			// var mesh = new THREE.SkinnedMesh(geometry, material, false );
-			// mesh.position.set(params.x, params.y, params.z);
-			// mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
-//       		
-			// var originalMaterial = materials[ 0 ];
-			// originalMaterial.skinning = true;
-			// originalMaterial.transparent = true;
-			// originalMaterial.alphaTest = 0.75;
-// 		
-			// // for(i in params.properties)
-				// // mesh[i] = params.properties[i];
-//  
-			// params.callback(mesh);
-		// });
-		
-		// THREExt.getLoader().load(Paths.MESH_ROOT + params.path, function(collada) {
-			// var mesh = collada.scene;
-			// mesh.position.set(params.x, params.y, params.z);
-			// mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
-			// mesh.updateMatrix();
-// 
-			// for(i in params.properties)
-				// mesh[i] = params.properties[i];
-// 
-			// params.callback(mesh);
-		// }); 
-		
-		// params.path = "location/plains.js";
-		// new THREE.JSONLoader().load(Paths.MESH_ROOT + params.path, function( geometry, materials ) {
-			// //var material = new THREE.MeshLambertMaterial( materials );
-			// var material = new THREExt.material({image: "location/grassyHills.png"})
-			// var mesh = new THREE.SkinnedMesh(geometry, material, false );
-			// mesh.position.set(params.x, params.y, params.z);
-			// mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
-//       		
-			// for(i in params.properties)
-				// mesh[i] = params.properties[i];
-// 
-			// params.callback(mesh);
+	__prepareMeshAndCallBack : function(scene, params) {
+		var newScene = new THREE.Scene();
+		for(i in scene.children) {
+			var c = scene.children[i];
+			if(!(c instanceof THREE.Mesh))
+				continue;
+				
+			newScene.add(new THREE.Mesh(c.geometry, c.material)); 
+		}
+
+		newScene.position.set(params.x, params.y, params.z);
+		newScene.updateMatrix();
+		for(i in params.properties)
+			newScene[i] = params.properties[i];
+
+		params.callback(newScene);
 	},
-		
+	
+	__sceneLoaded : function(path) {
+		for(i in THREExt.queuedLoadRequests[path])
+			THREExt.__prepareMeshAndCallBack(THREExt.loadedScenes[path], THREExt.queuedLoadRequests[path][i]);
+	},
+	
 	loadSceneAsync : function(p) {
-		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, scale: 1.0, properties: {}});
-
-		new THREE.SceneLoader().load(Paths.MESH_ROOT + params.path + ".js", function( result ) {
-			var mesh = result.scene;
-			mesh.position.set(params.x, params.y, params.z);
-			mesh.scale.x = mesh.scale.y = mesh.scale.z = params.scale;
-			mesh.updateMatrix();
-      		
-			for(i in params.properties)
-				mesh[i] = params.properties[i];
-
-			params.callback(mesh);
-		}); 
+		var params = Params.check(p, ['path', 'callback'], {x: 0, y: 0, z: 0, scale: 1.0, properties: {}, loadTimeElapsed: 0});
 		
+		if(THREExt.loadedScenes.hasOwnProperty(params.path)) {
+			THREExt.__prepareMeshAndCallBack(THREExt.loadedScenes[params.path], params);
+			return;
+		}
+		
+		if(!THREExt.queuedLoadRequests.hasOwnProperty(params.path)) {
+			THREExt.queuedLoadRequests[params.path] = new Array();
+			console.log("Loading scene from " + params.path);
+			THREExt.sceneLoader.load(Paths.MESH_ROOT + params.path + ".js", function( result ) {
+				THREExt.loadedScenes[params.path] = result.scene;
+				THREExt.__sceneLoaded(params.path);
+			}); 
+		}
+		
+		THREExt.queuedLoadRequests[params.path].push(params);
 	},
 	
 	clearChildren: function(o) {
