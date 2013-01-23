@@ -1,5 +1,5 @@
 var ThreeRenderer = {
-	camera: new THREE.PerspectiveCamera(45, 1.0, 0.1, 999999),
+	camera: new THREE.PerspectiveCamera(45, 1.0, 0.01, 1000),
 	renderer: new THREE.WebGLRenderer(),
 	scene: new THREE.Scene(),
 	projector: new THREE.Projector(),
@@ -8,9 +8,15 @@ var ThreeRenderer = {
 	setup: function(viewportElement) {
 		ThreeRenderer.viewers = {'area': ThreeAreaViewer};
 		ThreeRenderer.sceneInteractors = {'area': ThreeAreaInteractor};
+		ThreeRenderer.setRenderDistance(50);
 		ThreeCameraController.setup(ThreeRenderer.camera);
 
 		viewportElement.append(ThreeRenderer.renderer.domElement);
+	},
+	
+	setRenderDistance: function(distance) {
+		ThreeRenderer.camera.far = distance;
+		ThreeRenderer.scene.fog = new THREE.Fog(0xffffff, distance * 0.8, distance);
 	},
 	
 	setSceneContent: function(sceneContent) {

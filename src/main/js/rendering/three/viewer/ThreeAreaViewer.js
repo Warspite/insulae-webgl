@@ -6,7 +6,7 @@ var ThreeAreaViewer = {
 		ThreeAreaViewer.scene = scene;
 		
 		ThreeCameraController.reset();
-		ThreeCameraController.position.setZ(40);
+		ThreeCameraController.position.setZ(10);
 		
 		ThreeAreaViewer.addSunAndMoon();
 		ThreeAreaViewer.addSky();
