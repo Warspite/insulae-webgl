@@ -19,7 +19,7 @@ var ThreeCameraController = {
 	reset: function() {
 		ThreeCameraController.matrix = new THREE.Matrix4(),
 		ThreeCameraController.rotation = 0.0;
-		ThreeCameraController.pitch = Math.PI / 4;
+		ThreeCameraController.pitch = ThreeCameraController.MAX_PITCH;
 		ThreeCameraController.position = new THREE.Vector3(0, 0, 0);
 		ThreeCameraController.camera.up = new THREE.Vector3(0, 0, 1);
 	},
@@ -44,11 +44,11 @@ var ThreeCameraController = {
 		
 		ThreeCameraController.position.z += params.up * ThreeCameraController.ASCENSION_SPEED;
 		
-		ThreeCameraController.position.x -= params.forward * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-		ThreeCameraController.position.y += params.forward * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+		ThreeCameraController.position.x += params.forward * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+		ThreeCameraController.position.y += params.forward * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
 
-		ThreeCameraController.position.x += params.right * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
-		ThreeCameraController.position.y += params.right * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+		ThreeCameraController.position.x += params.right * Math.sin(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
+		ThreeCameraController.position.y -= params.right * Math.cos(ThreeCameraController.rotation) * ThreeCameraController.position.z * ThreeCameraController.TRANSLATION_SPEED;
 	},
 	
 	rotate: function(p) {

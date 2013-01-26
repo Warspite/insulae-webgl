@@ -1,5 +1,6 @@
 var ThreeAreaViewer = {
 	scene: null,
+	locationMeshes: new LocationRepresentations(0),
 	hoverHighlight: new THREE.Mesh(new THREE.SphereGeometry(0.3, 16, 16), THREExt.material({color: 0xff0000})),
 	
 	view: function(sceneContent, scene) {
@@ -43,20 +44,34 @@ var ThreeAreaViewer = {
 	
 	addLocations: function(locations) {
 		ProgressPopup.reportProgress("Locations retrieved");
-		ThreeAreaViewer.locations = locations;
-		ThreeAreaViewer.locationsInScene = 0;
-		console.log("Received " + locations.length + " locations.");
-		ProgressPopup.reportProgress("Populating scene with locations");
+		ThreeAreaViewer.locationMeshes = new LocationRepresentations(locations.length);
+		ProgressPopup.reportProgress("Adding locations to scene");
 		$.each(locations, function(index, l) {
 			var lType = StaticData.locationTypes[l.locationTypeId];
 			THREExt.loadSceneAsync({
 				path: "location/" + lType.canonicalName, 
-				callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); ThreeAreaViewer.locationsInScene++; ThreeAreaViewer.checkProgress(); }, 
+				callback: function(mesh) { ThreeAreaViewer.addLocation(mesh); }, 
 				x: l.coordinatesX, 
 				y: l.coordinatesY,
-				properties: {mouseVisible: true, tooltip: lType.name}
+				properties: {mouseVisible: true, tooltip: lType.name, data: l}
 			}); 
 		});
+	},
+	
+	addLocation: function(mesh) {
+		if(mesh.data.road) {
+			console.log("Road! " + mesh.data.coordinatesX + "," + mesh.data.coordinatesY);
+		 	$.each(mesh.children, function(index, c) {
+//				c.frustumCulled = false;
+//				c.parent.frustumCulled = false;
+//				c.material.fog = false;
+				// c.material = new THREE.ShaderMaterial({vertexShader: $('#roadVertexShader').text(), fragmentShader: $('#roadFragmentShader').text()});
+			});
+		}
+		
+		ThreeAreaViewer.scene.add(mesh); 
+		ThreeAreaViewer.locationMeshes.add(mesh); 
+		ThreeAreaViewer.checkProgress();
 	},
 	
 	highlight: function(o) {
@@ -77,7 +92,7 @@ var ThreeAreaViewer = {
 	},
 	
 	checkProgress: function() {
-		if(ThreeAreaViewer.locationsInScene < ThreeAreaViewer.locations.length)
+		if(!ThreeAreaViewer.locationMeshes.allLocationsAdded())
 			return;
 
 		Popup.hide(ProgressPopup);			

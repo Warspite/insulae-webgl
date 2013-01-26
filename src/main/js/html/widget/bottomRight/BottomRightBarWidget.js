@@ -1,7 +1,6 @@
 var BottomRightBarWidget = {
 	id: 'bottomRightBarWidget',
-	minimapToggleButton: $('#minimapToggleButton'),
-	container: $('#minimapToggleButton'),
+	minimapToggleButtonId: 'minimapToggleButton',
 	mimimapFolded: false,
 	
 	toggleMinimap: function() {
@@ -20,7 +19,7 @@ var BottomRightBarWidget = {
 		if(BottomRightBarWidget.minimapFolded)
 			img = 'plusButton.png';
 			
-		BottomRightBarWidget.minimapToggleButton.css('background-image', 'url(../images/icon/' + img + ')');		
+		$('#' + BottomRightBarWidget.minimapToggleButtonId).css('background-image', 'url(../images/icon/' + img + ')');		
 	},
 	
 	animateIntoPosition: function() {
@@ -32,7 +31,7 @@ var BottomRightBarWidget = {
 	},
 	
 	setup: function() {
-		BottomRightBarWidget.minimapToggleButton.click(BottomRightBarWidget.toggleMinimap);
-		BottomRightBarWidget.minimapToggleButton.attr('tooltip', 'Toggle the minimap.');
+		$('#' + BottomRightBarWidget.minimapToggleButtonId).click(BottomRightBarWidget.toggleMinimap);
+		$('#' + BottomRightBarWidget.minimapToggleButtonId).attr('tooltip', 'Toggle the minimap.');
 	},
 };

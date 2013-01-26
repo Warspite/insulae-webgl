@@ -8,6 +8,28 @@
 	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;" />
 	<link href="css/insulae.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="js/insulae-webgl.js"></script>
+	
+	<script type="x-shader/x-vertex" id="roadVertexShader">
+		// switch on high precision floats
+		#ifdef GL_ES
+		precision highp float;
+		#endif
+		
+		void main()
+		{
+			gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+		}
+	</script>
+	<script type="x-shader/x-fragment" id="roadFragmentShader">
+		#ifdef GL_ES
+		precision highp float;
+		#endif
+		
+		void main()
+		{
+			gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+		}
+	</script>
 </head>
 <body>
 	<div id="topBarWidget" >

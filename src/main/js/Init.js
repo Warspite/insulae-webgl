@@ -7,9 +7,7 @@ var Init = {
 		
 		Viewport.setRenderer(ThreeRenderer);
 
-		DynamicData.setup();
 		StaticData.load({completionCallback: Init.staticDataLoaded});
-		DynamicData.setup();
 		
 		Heartbeat.beat();
 	},

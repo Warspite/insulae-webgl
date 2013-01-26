@@ -35,7 +35,7 @@ html/widget/popup/ProgressPopup.js
 html/widget/popup/RegisterAccount.js
 html/widget/popup/SelectAvatarPopup.js
 
-data/DynamicData.js
+data/LocationRepresentations.js
 data/StaticData.js
 
 rendering/Viewport.js
