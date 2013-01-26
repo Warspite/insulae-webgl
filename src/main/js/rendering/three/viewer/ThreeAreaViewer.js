@@ -9,7 +9,6 @@ var ThreeAreaViewer = {
 		ThreeCameraController.position.setZ(10);
 		
 		ThreeAreaViewer.addSunAndMoon();
-		ThreeAreaViewer.addSky();
 		
 		sceneContent.setLocationsUpdatedCallback(ThreeAreaViewer.addLocations);
 	},
@@ -25,12 +24,6 @@ var ThreeAreaViewer = {
 	
 		ThreeAreaViewer.scene.add(ThreeAreaViewer.sunLight);
 		ThreeAreaViewer.scene.add(ThreeAreaViewer.moonLight);
-	},
-	
-	addSky: function() {
-		var material = THREExt.material({image: "sky/posx.jpg", color: 0x8080ff});
-		material.side = THREE.BackSide;
-		ThreeAreaViewer.scene.add(new THREE.Mesh(new THREE.CubeGeometry(100000, 100000, 100000), material));
 	},
 	
 	animate: function(heartbeat) {
