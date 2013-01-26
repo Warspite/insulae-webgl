@@ -11,6 +11,7 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 #loginButton { width: 60px; }
 
 .ajaxSpinner { width: 24px; height: 24px; float: left; visibility: collapse; background-image: url('../images/ajax-spinner.gif'); background-size: 24px 24px; }
+.progressSpinner { margin-left: auto; margin-right: auto; width: 24px; height: 24px; background-size: 24px 24px; background-image: url('../images/ajax-spinner.gif'); }
 
 .topBarChild { height: 0px; visibility: collapse; }
 .button:hover { cursor: pointer; }
@@ -39,6 +40,9 @@ input, select { border: solid 1px #e5e5f0; padding: 0; margin: 0; width: 125px; 
 .centeredPopup *{ 
 	margin: 0 auto;
 }
+
+.printoutLog { margin-left: 0; border-width: 1px; border-color: rgba(0, 0, 0, 0.7); border-style: solid; text-align: left; overflow: hidden; }
+#progressText { width: 90%; height: 100px; }
 
 #errorMessage {
 	z-index: 100;

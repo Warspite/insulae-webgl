@@ -11,6 +11,9 @@ var ThreeAreaViewer = {
 		ThreeAreaViewer.addSunAndMoon();
 		
 		sceneContent.setLocationsUpdatedCallback(ThreeAreaViewer.addLocations);
+		
+		ProgressPopup.display();
+		ProgressPopup.reportProgress("Retrieving scene");
 	},
 	
 	addSunAndMoon: function() {
@@ -39,12 +42,16 @@ var ThreeAreaViewer = {
 	},
 	
 	addLocations: function(locations) {
+		ProgressPopup.reportProgress("Locations retrieved");
+		ThreeAreaViewer.locations = locations;
+		ThreeAreaViewer.locationsInScene = 0;
 		console.log("Received " + locations.length + " locations.");
+		ProgressPopup.reportProgress("Populating scene with locations");
 		$.each(locations, function(index, l) {
 			var lType = StaticData.locationTypes[l.locationTypeId];
 			THREExt.loadSceneAsync({
 				path: "location/" + lType.canonicalName, 
-				callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); }, 
+				callback: function(mesh) { ThreeAreaViewer.scene.add(mesh); ThreeAreaViewer.locationsInScene++; ThreeAreaViewer.checkProgress(); }, 
 				x: l.coordinatesX, 
 				y: l.coordinatesY,
 				properties: {mouseVisible: true, tooltip: lType.name}
@@ -68,4 +75,11 @@ var ThreeAreaViewer = {
 			new TWEEN.Tween( ThreeAreaViewer.hoverHighlight.position ).to( {x: o.position.x, y: o.position.y, z: o.position.z + 0.7}, 200 ).easing( TWEEN.Easing.Sinusoidal.InOut ).start();
 		}
 	},
+	
+	checkProgress: function() {
+		if(ThreeAreaViewer.locationsInScene < ThreeAreaViewer.locations.length)
+			return;
+
+		Popup.hide(ProgressPopup);			
+	}
 };

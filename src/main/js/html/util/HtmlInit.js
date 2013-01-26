@@ -3,6 +3,7 @@ var HtmlInit = {
 		CreateAvatarPopup.setup();
 		CreateTroubleReport.setup();
 		ErrorMessage.setup();
+		ProgressPopup.setup();
 		Message.setup();
 		RegisterAccount.setup();
 		SelectAvatarPopup.setup();

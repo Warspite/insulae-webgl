@@ -31,6 +31,7 @@ html/widget/popup/CreateTroubleReport.js
 html/widget/popup/ErrorMessage.js
 html/widget/popup/Message.js
 html/widget/popup/Popup.js
+html/widget/popup/ProgressPopup.js
 html/widget/popup/RegisterAccount.js
 html/widget/popup/SelectAvatarPopup.js
 
