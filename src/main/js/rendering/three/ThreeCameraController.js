@@ -1,8 +1,8 @@
 var ThreeCameraController = {
-	MIN_PITCH: 0.001,
-	MAX_PITCH: 1.3,
-	MIN_ALTITUDE: 2,
-	MAX_ALTITUDE: 30,
+	MIN_PITCH: 0.5,
+	MAX_PITCH: 1.5,
+	MIN_ALTITUDE: 0.5,
+	MAX_ALTITUDE: 10,
 	TRANSLATION_SPEED: 0.002,
 	PITCH_SPEED: 0.0012,
 	ROTATION_SPEED: 0.003,
@@ -35,7 +35,7 @@ var ThreeCameraController = {
 			Math.sin(ThreeCameraController.rotation) * Math.cos(ThreeCameraController.pitch), 
 			-Math.sin(ThreeCameraController.pitch) 
 		);
-		lookAt.addSelf(c.position);
+		lookAt.add(c.position);
 		c.lookAt(lookAt);
 	},
 	

@@ -45,6 +45,7 @@ rendering/three/THREExt.js
 rendering/three/ThreeRenderer.js
 rendering/three/ThreeCameraController.js
 rendering/three/viewer/ThreeAreaViewer.js
+rendering/three/viewer/objects/ThreeOcean.js
 rendering/three/sceneInteractor/ThreeAreaInteractor.js
 
 Init.js

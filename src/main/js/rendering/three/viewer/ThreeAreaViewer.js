@@ -5,11 +5,13 @@ var ThreeAreaViewer = {
 	
 	view: function(sceneContent, scene) {
 		ThreeAreaViewer.scene = scene;
+		ThreeAreaViewer.ocean = null;
 		
 		ThreeCameraController.reset();
 		ThreeCameraController.position.setZ(10);
 		
 		ThreeAreaViewer.addSunAndMoon();
+		ThreeAreaViewer.addCameraLight();
 		
 		sceneContent.setLocationsUpdatedCallback(ThreeAreaViewer.addLocations);
 		
@@ -17,29 +19,41 @@ var ThreeAreaViewer = {
 		ProgressPopup.reportProgress("Retrieving scene");
 	},
 	
+	addCameraLight: function() {
+		ThreeAreaViewer.cameraLight = new THREE.PointLight(0x808040);
+		ThreeAreaViewer.cameraLight.position = ThreeCameraController.position;
+		ThreeAreaViewer.cameraLight.distance = 15.0;
+		ThreeAreaViewer.scene.add(ThreeAreaViewer.cameraLight);
+	},
+	
 	addSunAndMoon: function() {
 		ThreeAreaViewer.sunLight = new THREE.PointLight(0xffe993);
 		ThreeAreaViewer.sunLight.radius = 100;
-		ThreeAreaViewer.sunLight.speed = 0.0001;
+		ThreeAreaViewer.sunLight.speed = 0.0005;
 	
 		ThreeAreaViewer.moonLight = new THREE.PointLight(0x404252);
 		ThreeAreaViewer.moonLight.radius = -100;
-		ThreeAreaViewer.moonLight.speed = 0.0001;
+		ThreeAreaViewer.moonLight.speed = 0.0005;
 	
 		ThreeAreaViewer.scene.add(ThreeAreaViewer.sunLight);
 		ThreeAreaViewer.scene.add(ThreeAreaViewer.moonLight);
 	},
 	
+	addOcean: function(locationMeshes) {
+		ThreeAreaViewer.ocean = new ThreeOcean(locationMeshes.boundaries);
+		ThreeAreaViewer.scene.add(ThreeAreaViewer.ocean.mesh);
+	},
+	
 	animate: function(heartbeat) {
 		ThreeAreaViewer.animateHeavenlyBody(ThreeAreaViewer.sunLight, heartbeat);
 		ThreeAreaViewer.animateHeavenlyBody(ThreeAreaViewer.moonLight, heartbeat);
+		if(ThreeAreaViewer.ocean)
+			ThreeAreaViewer.ocean.animate(heartbeat);
 	},
 	
 	animateHeavenlyBody: function(b, heartbeat) {
-		if(b) {
-			b.position.setY(b.radius * Math.sin(heartbeat.totalTime * b.speed));
-			b.position.setZ(b.radius * Math.cos(heartbeat.totalTime * b.speed));
-		}
+		if(b)
+			b.position.set(0.0, b.radius * Math.sin(heartbeat.totalTime * b.speed), b.radius * Math.cos(heartbeat.totalTime * b.speed));
 	},
 	
 	addLocations: function(locations) {
@@ -50,7 +64,7 @@ var ThreeAreaViewer = {
 			var lType = StaticData.locationTypes[l.locationTypeId];
 			THREExt.loadSceneAsync({
 				path: "location/" + lType.canonicalName, 
-				callback: function(mesh) { ThreeAreaViewer.addLocation(mesh); }, 
+				callback: function(mesh) { ThreeAreaViewer.addLocationMesh(mesh); }, 
 				x: l.coordinatesX, 
 				y: l.coordinatesY,
 				properties: {mouseVisible: true, tooltip: lType.name, data: l}
@@ -58,7 +72,7 @@ var ThreeAreaViewer = {
 		});
 	},
 	
-	addLocation: function(mesh) {
+	addLocationMesh: function(mesh) {
 		if(mesh.data.road) {
 			console.log("Road! " + mesh.data.coordinatesX + "," + mesh.data.coordinatesY);
 		 	$.each(mesh.children, function(index, c) {
@@ -94,7 +108,10 @@ var ThreeAreaViewer = {
 	checkProgress: function() {
 		if(!ThreeAreaViewer.locationMeshes.allLocationsAdded())
 			return;
+			
+		if(!ThreeAreaViewer.ocean)
+			ThreeAreaViewer.addOcean(ThreeAreaViewer.locationMeshes);
 
 		Popup.hide(ProgressPopup);			
-	}
+	},
 };
